@@ -1,0 +1,678 @@
+\documentclass[fleqn]{article}
+\usepackage{color}
+\usepackage[a4paper,height=22cm]{geometry}
+\usepackage{parskip}
+\newcommand{\MSY}{\mathrm{MSY}}
+\newcommand{\msy}{_\mathrm{MSY}}
+\newcommand{\Rate}{\mathrm{Rate}}
+\begin{document}
+
+\title{Biomass dynamic models}
+\author{Arni Magnusson}
+\maketitle
+\tableofcontents
+
+\section{Overview}
+
+Kingsland (1982) gives a review of biomass models.
+
+\newpage
+
+\section{Schaefer (1954)}
+
+\subsection{$\mathrm{Same}+\mathrm{Growth}-\mathrm{Removals}$}
+
+The Schaefer model is:
+
+\begin{eqnarray*}
+  B_t &=& B_{t-1} \;+\; rB_t\!\left(\;\!\!1\!-\!\frac{B_t}{K}\right) \;-\; C_t
+\end{eqnarray*}
+
+\section{Surplus production}
+
+The second term describes the relationship between surplus production (growth)
+and abundance:
+
+\begin{eqnarray*}
+  g(B) &=& rB\left(1-\frac{B}{K}\right)\\[1ex]
+\end{eqnarray*}
+
+In biological terms, the surplus production combines recruitment, body growth,
+and natural mortalities.
+
+Conceptually, the model describes the simplest case of linear recruitment, where
+all individuals have the same body weight, and the natural mortality rate is
+constant. Individiuals reproduce as 1-year-olds and then die. After a period of
+removals, the population rebuilds towards $K$ until the number of individuals
+dying from natural causes equals the recruitment.
+
+\subsection{Original equation}
+
+Schaefer (1954, Eq.~2):
+
+\begin{eqnarray*}
+  g(B) &=& k_2B\,(L-B)\\[1ex]
+\end{eqnarray*}
+
+Replace $k_2\!=\!\frac{r}{K}$ and $L=K$:
+
+\begin{eqnarray*}
+  g(B) &=& \frac{r}{K}\,B\,(K-B)       \\[1em]
+  ~    &=& rB\left(\frac{K-B}{K}\right)\\[1em]
+  ~    &=& rB\left(1-\frac{B}{K}\right)
+\end{eqnarray*}
+
+\newpage
+
+\subsection{$B\msy=0.5K$}
+
+The surplus production is maximized where the derivative of the growth function
+is zero. It's easiest to find the derivative by using elementary calculus
+notation,
+
+\begin{eqnarray*}
+  f(x)  &=& rx\left(1-\frac{x}{K}\right)\\[1em]
+  ~     &=& rx \;-\; \frac{\;rx^2}{K}   \\[1em]
+  ~     &=& rx \;-\; \frac{\,r}{K}\,x^2 \\[1em]
+  f'(x) &=& r \;-\; 2\,\frac{\,r}{K}\,x \\[1em]
+  ~     &=& r \;-\; \frac{2r}{K}\,x     \\[1ex]
+\end{eqnarray*}
+
+so:
+
+\begin{eqnarray*}
+  g'(B) &=& r \;-\; \frac{2r}{K}\,B\\[1ex]
+\end{eqnarray*}
+
+$B\msy$ is where the derivative equals zero,
+
+\begin{eqnarray*}
+  0 &=& r \;-\; \frac{2r}{K}\,B\msy\\[1ex]
+\end{eqnarray*}
+
+and we can isolate $B\msy$:
+
+\begin{eqnarray*}
+  \frac{2r}{K}\,B\msy &=& r            \\[1em]
+  2rB\msy             &=& rK           \\[1em]
+  B\msy               &=& \frac{rK}{2r}\\[1em]
+  &=& \frac{r}{2r}\,K                  \\[1em]
+  &=& 0.5K
+\end{eqnarray*}
+
+\newpage
+
+\subsection{$\MSY=0.25\,rK$}
+
+Knowing $B\msy\!=\!0.5K$ we can evaluate $\MSY\!=\!g(B\msy)$:
+
+\begin{eqnarray*}
+  g(B) &=& rB\left(1-\frac{B}{K}\right)          \\[1em]
+  \MSY &=& rB\msy\!\left(1-\frac{B\msy}{K}\right)\\[1em]
+  ~    &=& 0.5\,rK\!\left(1-\frac{0.5K}{K}\right)\\[1em]
+  ~    &=& 0.5\,rK\,(1\!-\!0.5)                  \\[1em]
+  ~    &=& 0.5\,rK\,(0.5)                        \\[1em]
+  ~    &=& 0.25\,rK                              \\[1ex]
+\end{eqnarray*}
+
+\subsection{Relative growth rate}
+
+The relative growth rate, as a fraction of current abundance, is
+$\Rate(B)=g(B)/B$,
+
+\begin{eqnarray*}
+  g(B)     &=& rB\left(1-\frac{B}{K}\right)                \\[1em]
+  \Rate(B) &=& \left.rB\left(1-\frac{B}{K}\right)\right/\!B\\[1em]
+  ~        &=& r\left(1-\frac{B}{K}\right)                 \\[1em]
+  ~        &=& r \;-\; \frac{rB}{K}                        \\[1ex]
+\end{eqnarray*}
+
+so the relative growth rate approaches $r$ when the abundance is close to zero,
+and declines linearly with $B$ until zero growth occurs at abundance $K$.
+
+\newpage
+
+\section{Variations}
+
+\subsection{Gompertz (1825)}
+
+Applied in stock assessment by Fox (1970, Eq.~8):
+
+\begin{eqnarray*}
+  g(B) &=& rB\,(\log K\!-\!\log B)                                      \\[1em]
+  ~    &=& rB\,\log\;\!\!\!\left(\!\frac{K}{B}\:\!\!\right)             \\[1em]
+  ~    &=& rB\,\log K\!\left(\frac{\,\log K\!-\!\log B\,}{\log K}\right)\\[1em]
+  ~    &=& rB\,\log K\!
+  \left(\frac{\,\log K\,}{\log K}-\frac{\,\log B\,}{\log K}\right)      \\[1em]
+  ~    &=& rB\,\log K\!\left(1-\frac{\,\log B\,}{\log K}\right)         \\[1em]
+\end{eqnarray*}
+
+The surplus production is maximized where the derivative of the growth function
+is zero. It's easiest to find the derivative by using elementary calculus
+notation,
+
+\begin{eqnarray*}
+  f(x)  &=& ax\,(b\!-\!\log x)                                  \\[1em]
+  ~     &=& abx \;-\; ax\log x                                  \\[1em]
+  f'(x) &=& ab \;-\; \Big[(ax)'\log x \;+\; (ax)(\log x)'\,\Big]\\[1em]
+  ~     &=& ab \;-\; \Big[\,a\log x \;+\; (ax)\frac{1}{x}\,\Big]\\[1em]
+  ~     &=& ab \;-\; \Big[\,a\log x \;+\; a\,\Big]              \\[1em]
+  ~     &=& ab \;-\; a\log x \;-\; a                            \\[1ex]
+\end{eqnarray*}
+
+so:
+
+\begin{eqnarray*}
+  g'(B) &=& r\log K \;-\; r\log B \;-\; r
+\end{eqnarray*}
+
+\newpage
+
+$B\msy$ is where the derivative equals zero:
+
+\begin{eqnarray*}
+  0 &=& r\log K \;-\; r\log B\msy \;-\; r\\[1ex]
+\end{eqnarray*}
+
+First isolate $\log B\msy$,
+
+\begin{eqnarray*}
+  r\log B\msy &=& r\log K \;-\; r\\[1em]
+  \log B\msy &=& \log K \;-\; 1  \\[1ex]
+\end{eqnarray*}
+
+then exponentiate:
+
+\begin{eqnarray*}
+  \exp(\log B\msy) &=&       \exp(\log K-1)                  \\[1em]
+  B\msy            &=&       \exp(\log K) \;\times\; \exp(-1)\\[1em]
+  ~                &=&       \frac{K}{e}                     \\[1em]
+  ~                &\approx& 0.368K                          \\[1ex]
+\end{eqnarray*}
+
+Knowing $B\msy\!=\!\frac{K}{e}$ we can evaluate $\MSY\!=\!g(B\msy)$:
+
+\begin{eqnarray*}
+  g(B) &=&       rB\,\log\;\!\!\!\left(\!\frac{K}{B}\:\!\!\right)       \\[1em]
+  \MSY &=&       rB\msy\,\log\;\!\!\!\left(\!\frac{K}{B\msy}\!\right)   \\[1em]
+  ~    &=&       r\,\frac{K}{e}\,\log\!
+  \left(\!\frac{\:K\:}{\frac{K}{e}}\!\right)                            \\[1em]
+  ~    &=&       \frac{rK}{e}\,\log\!\bigg(\!\frac{e}{K}\times K\!\bigg)\\[1em]
+  ~    &=&       \frac{rK}{e}\,\log(e)                                  \\[1em]
+  ~    &=&       \frac{rK}{e}                                           \\[1em]
+  ~    &\approx& 0.368\:rK
+\end{eqnarray*}
+
+\newpage
+
+\subsection{Pella-Tomlinson (1969)}
+
+Pella and Tomlinson (1969, Eq.~5):
+
+\begin{eqnarray*}
+  g(B) &=& \mathcal{H}B^m \;-\; \mathcal{K}B\\[1ex]
+\end{eqnarray*}
+
+Replace $\mathcal{H}\!=\!-\frac{r}{pK^p}$, $m\!=\!p\!+\!1$, and
+$\mathcal{K}\!=\!-\frac{r}{p}$:
+
+\begin{eqnarray*}
+  g(B) &=& -\frac{r}{\,pK^p\,}B^{\,p+1} \;+\; \frac{r}{p}B             \\[1em]
+  ~    &=& \frac{\,rB\,}{p} \;-\; \frac{r}{pK^p}B^{\;\!p+1}            \\[1em]
+  ~    &=& \frac{\,rB\,}{p} \;-\; \frac{r}{pK^p}B^p\!\times\!B         \\[1em]
+  ~    &=& \frac{\,rB\,}{p} \;-\; \frac{rB}{p}\!\times\!\frac{B^p}{K^p}\\[1em]
+  ~    &=& \frac{\,rB\,}{p}\left(1 \;-\; \frac{\;B^p}{\,K^p\,}\right)  \\[1em]
+  ~    &=& \frac{\,rB\,}{p}\!
+  \left[\,1 \;-\; \left(\frac{B}{K}\right)^{\!p}\,\right]
+\end{eqnarray*}
+
+\newpage
+
+The surplus production is maximized where the derivative of the growth function
+is zero. It's easiest to find the derivative by using elementary calculus
+notation,
+
+\begin{eqnarray*}
+  f(x)  &=& \frac{ax}{c}\!
+  \left[\,1-\left(\frac{x}{b}\right)^{\!c}\,\right]             \\[1em]
+  ~     &=& \frac{ax}{c} \;-\;
+  \frac{ax}{c}\!\left(\frac{x}{b}\right)^{\!c}                  \\[1em]
+  ~     &=& \frac{ax}{c} \;-\;
+  \frac{ax}{c}\!\left(\frac{x^c}{b^c}\!\right)                  \\[1em]
+  ~     &=& \frac{ax}{c} \;-\;
+  \frac{a}{\,c\,}\!\left(\!\frac{\,x^{\,c+1}}{b^c}\!\right)     \\[1em]
+  ~     &=& \frac{ax}{c} \;-\; \frac{a}{\,c\;\!b^c\,}\,x^{\,c+1}\\[1em]
+  f'(x) &=& \frac{a}{\,c\,} \;-\;
+  \left(\!\frac{a}{\;c\;\!b^c\:}\!\right)\!(c\!+\!1)\,x^c       \\[1em]
+  ~     &=& \frac{a}{\,c\,} \;-\;
+  \left(\!\frac{ac+a}{c\;\!b^c}\!\right)x^c                     \\[1ex]
+\end{eqnarray*}
+
+so:
+
+\begin{eqnarray*}
+  g'(B) &=& \frac{r}{\,p\,} \;-\; \left(\!\frac{rp+r}{pK^p}\!\right)\!B^p\\[1ex]
+\end{eqnarray*}
+
+$B\msy$ is where the derivative equals zero:
+
+\begin{eqnarray*}
+  0 &=& \frac{r}{\,p\,} \;-\; \left(\!\frac{rp+r}{pK^p}\!\right)\!B\msy^p
+\end{eqnarray*}
+
+\newpage
+
+First isolate $B\msy^p$,
+
+\begin{eqnarray*}
+  \left(\!\frac{rp+r}{pK^p}\!\right)\!B\msy^p &=& \frac{r}{\,p\,}\\[1em]
+  B\msy^p &=& \frac{r}{\,p\,}\left(\!\frac{pK^p}{rp+r}\!\right)  \\[1em]
+  ~       &=& r\left(\!\frac{K^p}{rp+r}\!\right)                 \\[1em]
+  ~       &=& \frac{rK^p}{\,rp+r\,}                              \\[1em]
+  ~       &=& \frac{K^p}{\;p+1\,}                                \\[1ex]
+\end{eqnarray*}
+
+then log-transform,
+
+\begin{eqnarray*}
+  \log\,(B\msy^p) &=& \log\!\left(\!\frac{K^p}{\,p\!+\!1\,}\!\right)\\[1em]
+  p\log B\msy     &=& \log(K^p) \;-\; \log(p\!+\!1)\\[1em]
+  \log B\msy      &=& \frac{\,p\log K \;-\; \log(p\!+\!1)\,}{p}     \\[1em]
+  ~               &=& \log K \;-\; \frac{\:\log(p\!+\!1)\,}{p}      \\[1em]
+  ~               &=& \log K \;+\;
+  \left(\!-\frac{1}{p}\right)\log(p\!+\!1)                          \\[1em]
+  ~               &=& \log K \;+\;
+  \log(p\!+\!1)\!\left(\!-\frac{1}{p}\right)                        \\[1ex]
+\end{eqnarray*}
+
+and exponentiate:
+
+\begin{eqnarray*}
+  \exp(\log B\msy) &=& \exp\!\left[\log K \;+\;
+    \log(p\!+\!1)\!\left(\!-\frac{1}{p}\right)\right]          \\[1em]
+  B\msy            &=& \exp(\log K) \;\times\;
+  \exp\!\left[\log(p\!+\!1)\!\left(\!-\frac{1}{p}\right)\right]
+\end{eqnarray*}
+
+\newpage
+
+Noting that $x^{ab}=(x^a)^b$, we rearrange the last term:
+
+\begin{eqnarray*}
+  B\msy &=& K \;\times\;
+  \exp\!\left[\log(p\!+\!1)\!\left(\!-\frac{1}{p}\right)\right]      \\[1em]
+  ~     &=& K \;\times\;
+  \bigg(\!\!\exp\!\Big[\!\log(p\!+\!1)\Big]\bigg)^{-\frac{1}{p}}     \\[1em]
+  ~     &=& K \;\times\; (p\!+\!1)^{-\frac{1}{p}}\\[1em]
+  ~     &=& K\!\left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!\frac{1}{p}}\\[1ex]
+\end{eqnarray*}
+
+When $p\!=\!1$ we get Schaefer:
+
+\begin{eqnarray*}
+  B\msy &=& K\!\left(\!\frac{1}{\,1\!+\!1\,}\!\right)^{\!\frac{1}{1}}\\[1em]
+  ~     &=& K\!\left(\!\frac{1}{\,2\,}\!\right)                      \\[1em]
+  ~     &=& 0.5K
+\end{eqnarray*}
+
+\newpage
+
+When $p\!\to\!0$ we get Gompertz,
+
+\begin{eqnarray*}
+  B\msy &=& \lim_{p\to 0}\,K\!
+  \left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!\frac{1}{p}}              \\[1em]
+  ~     &=& K \;\times\; \lim_{p\to 0}
+  \left(\!\frac{1}{\,1\!+\!p\,}\!\right)^{\!\frac{1}{p}}              \\[1em]
+  ~     &=& K \;\times\; \lim_{p\to 0}
+  \left[\Big(1\!+\!p\Big)^{\!-1}\right]^{\frac{1}{p}}                 \\[1em]
+  ~     &=& K \;\times\;
+  \lim_{p\to 0}\Big(1\!+\!p\Big)^{\!-\frac{1}{p}}\\[1em]
+  ~     &=& K \;\times\; \exp\!\left(\lim_{p\to 0}\,
+    \log\!\left[\Big(1\!+\!p\Big)^{\!-\frac{1}{p}}\right]\right)      \\[1em]
+  ~     &=& K \;\times\; \exp\!
+  \left[\,\lim_{p\to 0}\,-\,\frac{1}{\,p\,}\log(1\!+\!p)\right]       \\[1em]
+  ~     &=& K \;\times\; \exp\!
+  \left[\,-\lim_{p\to 0}\frac{\,\log(p\!+\!1)\,}{p}\right]            \\[1ex]
+\end{eqnarray*}
+
+noting that $\displaystyle\lim_{x\to
+  c}\,\frac{f(x)}{g(x)}\,=\,\displaystyle\lim_{x\to c}\,\frac{f'(x)}{g'(x)}\:$:
+
+\begin{eqnarray*}
+  B\msy &=&       K \;\times\;
+  \exp\!\left[\,-\lim_{p\to 0}\frac{\,\frac{1}{1+p}\,}{1}\right]\\[1em]
+  ~     &=&       K \;\times\;
+  \exp\!\left[\,-\lim_{p\to 0}\,\frac{1}{\,1\!+\!p\;}\right]    \\[1em]
+  ~     &=&       K \;\times\;
+  \exp\!\left[\,-\,\frac{1}{\,1\!+\!0\;}\right]                 \\[1em]
+  ~     &=&       K \;\times\; \exp(-1)                         \\[1em]
+  ~     &=&       \frac{K}{e}                                   \\[1em]
+  ~     &\approx& 0.368K
+\end{eqnarray*}
+
+\newpage
+
+Knowing $B\msy=K\!\left(\!\frac{1}{\,p+1\,}\!\right)^{\!\frac{1}{p}}$ we can
+evaluate $\MSY\!=\!g(B\msy)$:
+
+\begin{eqnarray*}
+  g(B) &=& \frac{\,rB\,}{p}\!
+  \left[\,1 \;-\; \left(\frac{B}{K}\right)^{\!p}\,\right]                \\[1em]
+  \MSY &=& \frac{\,rB\msy\,}{p}\!
+  \left[\,1 \;-\; \left(\frac{B\msy}{K}\right)^{\!p}\,\right]            \\[1em]
+  ~    &=&
+  \frac{\,r\,K\!\left(\!\frac{1}{\,p+1\,}\!\right)^{\!\frac{1}{p}}}{p}
+  \left[\,1 \;-\; \left(\!\frac{\,K\!
+        \left(\!\frac{1}{\,p+1\,}\!\right)^{\!\frac{1}{p}}\,}{K}\!\right)
+    ^{\!p}\;\right]                                                      \\[1em]
+  ~    &=& \frac{\,rK\,}{p}\!
+  \left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!\frac{1}{p}}\,
+  \left(1 \;-\; \left[\left(\!\frac{1}{\,p+1\,}\!\right)
+      ^{\!\frac{1}{p}}\right]^{\!p}\;\right)                             \\[1em]
+  ~    &=& \frac{\,rK\,}{p}\!
+  \left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!\frac{1}{p}}\,
+  \left(1 \;-\; \!\frac{1}{\,p+1\,}\!\right)                             \\[1em]
+  ~    &=& \frac{\,rK\,}{p}\!
+  \left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!\frac{1}{p}}\,
+  \left(\frac{\,p+1\,}{p+1} \;-\; \!\frac{1}{\,p+1\,}\!\right)           \\[1em]
+  ~    &=& \frac{\,rK\,}{p}\!
+  \left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!\frac{1}{p}}\,
+  \left(\!\frac{p}{\,p+1\,}\!\right)                                     \\[1em]
+  ~    &=& \frac{\,rK\,}{p}\!\left(\!\frac{p}{\,p+1\,}\!\right)\!
+  \left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!\frac{1}{p}}                 \\[1em]
+  ~    &=& rK\!\left(\!\frac{1}{\,p\!+\!1\,}\!\right)\!
+  \left(\!\frac{1}{\,p+1\,}\!\right)^{\!\frac{1}{p}}                     \\[1em]
+  ~    &=& rK\!\left(\!\frac{1}{\,p+1\,}\!\right)^{\!1+\frac{1}{p}}      \\[1ex]
+\end{eqnarray*}
+
+When $p\!=\!1$ we get Schaefer:
+
+\begin{eqnarray*}
+  \MSY &=& rK\left(\!\frac{1}{\,1+1\,}\!\right)^{\!1+\frac{1}{1}}\\[1em]
+  ~    &=& rK\left(\frac{1}{2}\right)^{\!2}                      \\[1em]
+  ~    &=& 0.25\,rK
+\end{eqnarray*}
+
+\newpage
+
+When $p\!\to\!0$ we get Gompertz,
+
+\begin{eqnarray*}
+  \MSY &=& \lim_{p\to 0}\,
+  rK\!\left(\!\frac{1}{\,p\!+\!1\,}\!\right)^{\!1+\frac{1}{p}}        \\[1em]
+  ~    &=& rK \;\times\; \lim_{p\to 0}
+  \left(\!\frac{1}{\,1\!+\!p\,}\!\right)^{\!1+\frac{1}{p}}            \\[1em]
+  ~    &=& rK \;\times\; \exp\!\left(\lim_{p\to 0}\,
+    \log\left[\left(\!\frac{1}{\,1\!+\!p\,}\!\right)^{\!1+\frac{1}{p}}
+    \right]\right)                                                    \\[1em]
+  ~    &=& rK \;\times\; \exp\!\left[\,\lim_{p\to 0}
+    \left(\!1\!+\!\frac{1}{p}\right)
+    \log\!\left(\!\frac{1}{\,1\!+\!p\,}\!\right)\right]               \\[1em]
+  ~    &=& rK \;\times\; \exp\!\left[\,-\lim_{p\to 0}
+    \left(\!1\!+\!\frac{1}{p}\right)\log(1\!+\!p)\right]              \\[1em]
+  ~    &=& rK \;\times\; \exp\!\left[\,-\lim_{p\to 0}\;
+    \log(1\!+\!p) \;+\; \frac{\,\log(1\!+\!p)\,}{p}\right]            \\[1em]
+  ~    &=& rK \;\times\; \exp\!\left[\,-\lim_{p\to 0}
+    \frac{\,\log(1\!+\!p)\,}{p}\right]                                \\[1ex]
+\end{eqnarray*}
+
+noting that $\displaystyle\lim_{x\to
+  c}\,\frac{f(x)}{g(x)}\,=\,\displaystyle\lim_{x\to c}\,\frac{f'(x)}{g'(x)}\:$:
+
+\begin{eqnarray*}
+  \MSY &=&      rK \;\times\;
+  \exp\!\left[\,-\lim_{p\to 0} \frac{\,\log(1\!+\!p)\,}{p}\right]\\[1em]
+  ~    &=&        rK \;\times\;
+  \exp\!\left[\,-\lim_{p\to 0}\frac{\,\frac{1}{1+p}\,}{1}\right]\\[1em]
+  ~    &=&       rK \;\times\;
+  \exp\!\left[\,-\lim_{p\to 0}\,\frac{1}{\,1\!+\!p\;}\right]    \\[1em]
+  ~    &=&       rK \;\times\;
+  \exp\!\left[\,-\,\frac{1}{\,1\!+\!0\;}\right]                 \\[1em]
+  ~    &=&       rK \;\times\; \exp(-1)                         \\[1em]
+  ~    &=&       \frac{rK}{e}                                   \\[1em]
+  ~    &\approx& 0.368\,rK
+\end{eqnarray*}
+
+\newpage
+
+The Pella-Tomlinson shape parameter $p$ does not only shift $B\msy$ away from
+$0.5K$, but also changes the maximum height of the production curve. This is
+unfortunate, as the modeller might be interested in exploring different
+shapes without altering the maximum productivity.\\[1em]
+
+Since we know the maximum surplus production for a given $p$,
+
+\begin{eqnarray*}
+  \MSY &=& rK\!\left(\!\frac{1}{\,p+1\,}\!\right)^{\!1+\frac{1}{p}}\\[1ex]
+\end{eqnarray*}
+
+the production can be scaled to any given range.\\[1em]
+
+Starting from the original Pella-Tomlinson,
+
+\begin{eqnarray*}
+  g(B) &=& \frac{rB}{p}\!\left[\,1 \;-\; \left(\frac{B}{K}\right)^{\!p}\,\right]\\[1ex]
+\end{eqnarray*}
+
+we first divide by MSY to scale the production between 0 and 1,
+
+\newpage
+
+\begin{eqnarray*}
+  g_1(B) &=& \frac{\quad\frac{rB}{p}\!
+    \left[\,1-\left(\frac{B}{K}\right)^p\,\right]\quad}
+  {rK\!\left(\!\frac{1}{\,p+1\,}\!\right)^{\!1+\frac{1}{p}}}            \\[1em]
+  ~    &=& \frac{\quad\frac{B}{p}\!
+    \left[\,1-\left(\frac{B}{K}\right)^p\,\right]\quad}
+  {K\!\left(\!\frac{1}{\,p+1\,}\!\right)^{\!1+\frac{1}{p}}}             \\[1em]
+  ~    &=& \frac{\quad B\!
+    \left[\,1-\left(\frac{B}{K}\right)^p\,\right]\quad}
+  {pK\!\left(\!\frac{1}{\,p+1\,}\!\right)^{\!1+\frac{1}{p}}}            \\[1em]
+  ~    &=& \frac{\quad B\!
+    \left[\,1-\left(\frac{B}{K}\right)^p\,\right]\quad}
+  {pK\!\left[\!\frac{1}{\,(p+1)^{\!1+\frac{1}{p}}\,}\!\right]}          \\[1em]
+  ~    &=& \frac{\quad B\!
+    \left[\,1-\left(\frac{B}{K}\right)^p\,\right]\quad}
+  {\frac{pK}{\,(p+1)^{\!1+\frac{1}{p}}\,}}                              \\[1em]
+  ~    &=& \frac{\;(p\!+\!1)^{1+\frac{1}{p}}\,}{pK} \quad\times\quad
+  B\!\left[\,1-\left(\frac{B}{K}\right)^p\,\right]                      \\[1em]
+  ~    &=& \frac{B}{\,pK\,}\,(p\!+\!1)^{1+\frac{1}{p}}
+  \!\left[\,1-\left(\frac{B}{K}\right)^p\,\right]                       \\[1ex]
+\end{eqnarray*}
+
+and then multiply by $0.25\,rK$ to use that as maximum production at any given
+$p$:
+
+\begin{eqnarray*}
+  g^\star(B) &=& 0.25\,rK \;\times\;
+  \frac{B}{\,pK\,}\,(p\!+\!1)^{1+\frac{1}{p}}\!
+  \left[\,1-\left(\frac{B}{K}\right)^p\,\right]                \\[1em]
+  ~ &=& \frac{\,0.25\,rB\,}{\,p\,}\,(p\!+\!1)^{1+\frac{1}{p}}\!
+  \left[\,1-\left(\frac{B}{K}\right)^p\,\right]                \\[1ex]
+\end{eqnarray*}
+
+\newpage
+
+\subsection{Theta-logistic (1973)}
+
+Gilpin and Ayala (1973, Eq.~3):
+
+\begin{eqnarray*}
+  g(B) &=& rB\!\left[\,1\!-\!\left(\frac{B}{K}\right)^{\!\theta}\:\right]\\[1ex]
+\end{eqnarray*}
+
+where $\theta$ gives the asymmetry of the growth.\\[1em]
+
+Different from Pella-Tomlinson, which has $\frac{r}{p}$ as the first term. The
+theta-logistic model has the nice property that $r$ is the initial growth rate,
+independent of $\theta$. The Pella-Tomlinson model has the nice property that it
+becomes the Gompertz model as $p\to 0$.\\[1em]
+
+The theta-logistic model has a problem with low $\theta$ values. Maximum
+production tends towards zero with decreasing $\theta$, so the model will need
+very large $K$ when $\theta$ is small.
+
+\newpage
+
+\subsection{Fletcher (1978)}
+
+From Prager (2002, Eqs~2--4):
+
+\begin{eqnarray*}
+  g(B) &=& \gamma m\frac{B}{K} \;-\;
+  \gamma m\left(\frac{B}{K}\right)^{\!n}       \\[1em]
+  ~    &=& \gamma m\left[\,\frac{B}{K} \;-\;
+    \left(\frac{B}{K}\right)^{\!\!n}\,\right]  \\[1em]
+  ~    &=& \gamma m\frac{B}{K}\left[\,1 \;-\;
+    \left(\frac{B}{K}\right)^{\!\!n-1}\,\right]\\[1ex]
+\end{eqnarray*}
+
+where
+
+\begin{eqnarray*}
+  \gamma &=& \frac{n^{n/(n-1)}}{n-1}\\[1ex]
+\end{eqnarray*}
+
+and $m\!=\!\frac{1}{4}\,rK$, i.e.\ MSY:
+
+\begin{eqnarray*}
+  g(B) &=& \gamma m\left[\,\frac{B}{K} \;-\;
+    \left(\frac{B}{K}\right)^{\!\!n}\,\right]              \\[1em]
+  ~    &=& \gamma\,\frac{rK}{4}\left[\,\frac{B}{K} \;-\;
+    \left(\frac{B}{K}\right)^{\!\!n}\,\right]              \\[1em]
+  ~    &=& \gamma\,\frac{rK}{4}\,\frac{B}{K} \;-\;
+  \gamma\,\frac{rK}{4}\!\left(\frac{B}{K}\right)^{\!\!n}   \\[1em]
+  ~    &=& \gamma\,\frac{r}{4}\,B \;-\;
+  \gamma\,\frac{rK}{4}\!\left(\frac{B}{K}\right)^{\!\!n}   \\[1em]
+  ~    &=& \gamma\,\frac{1}{4}\,rB \;-\;
+  \gamma\,\frac{1}{4}\,rK\!\left(\frac{B}{K}\right)^{\!\!n}\\[1em]
+  ~    &=& \frac{\gamma}{4}\,rB \;-\;
+  \frac{\gamma}{4}\,rK\!\left(\frac{B}{K}\right)^{\!\!n}   \\[1em]
+  ~    &=& \frac{\gamma}{4}\,r\left[B \;-\;
+    rK\!\left(\frac{B}{K}\right)^{\!\!n}\right]
+\end{eqnarray*}
+
+\newpage
+
+The Schaefer model corresponds to $n\!=\!2$ where $\gamma\!=\!4$,
+
+\begin{eqnarray*}
+  \gamma &=& \frac{n^{n/(n-1)}}{n-1}\\[1em]
+  ~      &=& \frac{2^{2/(2-1)}}{2-1}\\[1em]
+  ~      &=& \frac{2^{2/(1)}}{1}    \\[1em]
+  ~      &=& 2^{2/(1)}              \\[1em]
+  ~      &=& 2^2                    \\[1em]
+  ~      &=& 4                      \\[1ex]
+\end{eqnarray*}
+
+as verified here:
+
+\begin{eqnarray*}
+  g(B) &=& \frac{\gamma}{4}\,rB \;-\;
+  \frac{\gamma}{4}\,rK\!\left(\frac{B}{K}\right)^{\!\!n}\\[1em]
+  ~    &=& \frac{4}{4}\,rB \;-\;
+  \frac{4}{4}\,rK\!\left(\frac{B}{K}\right)^{\!2}       \\[1em]
+  ~    &=& rB \;-\; rK\!\left(\frac{B}{K}\right)^{\!2}  \\[1em]
+  ~    &=& rB \;-\; rK\,\frac{B^2}{K^2}                 \\[1em]
+  ~    &=& rB \;-\; r\,\frac{\;B^2}{K}                  \\[1em]
+  ~    &=& rB \;-\; rB\,\frac{B}{K}                     \\[1em]
+  ~    &=& rB\left(1 \;-\; \frac{B}{K}\right)
+\end{eqnarray*}
+
+\newpage
+
+Prager (2002) describes the shape of the production curve with the unitless
+ratio $\phi\!=\!\frac{B\msy}{K}$, which has a more intuitive meaning than the
+$n$ exponent. The relationship is:
+
+\begin{eqnarray*}
+  \phi &=& \left(\frac{1}{n}\right)^{\!1/(n-1)}\\[1ex]
+\end{eqnarray*}
+
+Insert $n\!=\!2$ and note how the Schaefer model corresponds to $\phi=0.5$, as
+expected:
+
+\begin{eqnarray*}
+  \phi &=& \left(\frac{1}{n}\right)^{\!1/(n-1)}\\[1em]
+  ~    &=& \left(\frac{1}{2}\right)^{\!1/(2-1)}\\[1em]
+  ~    &=& \left(\frac{1}{2}\right)^{\!1/(1)}\\[1em]
+  ~    &=& \frac{1}{2}
+\end{eqnarray*}
+
+\subsection{Polacheck et al.\ (1993)}
+
+Polacheck et al. (1993, Eq.~1):
+
+\begin{eqnarray*}
+  g(B) &=& \frac{r}{p}\,B\!
+  \left[\,1\!-\!\left(\frac{B}{K}\right)^{\!p}\,\right]\\[1ex]
+\end{eqnarray*}
+
+where $p$ controls the asymmetry of the sustainable yield versus stock biomass
+relationship.\\[1em]
+
+The authors note that the $\frac{r}{p}$ term is often omitted when the formula
+is presented.
+
+\newpage
+
+\section{References}
+
+\small\sloppy\frenchspacing\setlength{\hyphenpenalty}{1000}
+\begin{description}
+  \item Fox, W.W., Jr. 1970. An exponential surplus-yield model for optimizing
+  exploited fish populations. Trans. Am. Fish. Soc. 99:80--88.
+
+  \item Garrod, D.J. 1969. Empirical assessments of catch effort relationships
+  in the North Atlantic cod stock. ICNAF Res. Bull. 6:26--34.
+
+  \item Gilpin, M.E. and F.J. Ayala. 1973. Global models of growth and
+  competition. Proc. Natl. Acad. Sci. USA 70:3590--3593.
+
+  \item Gompertz, B. 1825. On the nature of the function expressive of the law
+  of human mortality, and on a new mode of determining the value of life
+  contingencies. Phil. Trans. R. Soc. Lond. 115:513--583.
+
+  \item Kingsland, S. 1982. The refractory model: The logistic curve and the
+  history of population ecology. Q. Rev. Biol. 57:29--52.
+
+  \item Laloe, F. 1995. Should surplus production models be fishery description
+  tools rather than biological models? Aquat. Living Resour. 8:1--16.
+
+  \item Pella, J.J. and P.K. Tomlinson. 1969. A generalized stock production
+  model. IATTC Bull. 13:421--496.
+
+  \item Polacheck, T., R. Hilborn, and A.E. Punt. 1993. Fitting surplus
+  production models: Comparing methods and measuring uncertainty. Can. J. Fish.
+  Aquat. Sci. 50:2597--2607.
+
+  \item Prager, M.H. 2002. Comparison of logistic and generalized
+  surplus-production models applied to swordfish, Xiphias gladius, in the north
+  Atlantic Ocean. Fish. Res. 58:41--57.
+
+  \item Schaefer, M.B. 1954. Some aspects of the dynamics of populations
+  important to the management of the commercial marine fisheries. IATTC Bull.
+  1:27--56.
+\end{description}
+
+\subsection{Look up later}
+\small\sloppy\frenchspacing\setlength{\hyphenpenalty}{1000}
+\begin{description}
+  \item Fletcher, R.I. 1978. On the restructuring of the Pella-Tomlinson system.
+  Fish. Bull. 76:515--521.
+
+  \item Fox, W.W., Jr. 1970. An exponential surplus-yield model for optimizing
+  exploited fish populations. Trans. Am. Fish. Soc. 99:80--88.
+
+  \item Garrod, D.J. 1969. Empirical assessments of catch effort relationships
+  in the North Atlantic cod stock. ICNAF Res. Bull. 6:26--34.
+
+  \item Hilborn, R. and C.J. Walters. 1992. Quantitative fisheries stock
+  assessment: Choice, dynamics and uncertainty. New York: Chapman and Hall.
+
+  \item Quinn, T.J., II and R.B. Deriso. 1999. Quantitative fish dynamics. New
+  York: Oxford University Press.
+\end{description}
+
+\end{document}

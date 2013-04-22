@@ -1,0 +1,83 @@
+% aspic.Rnw --
+%
+% Author: laurence kell <lauriekell@gmail.com>
+
+%\VignetteIndexEntry{aspic}
+%\VignetteIndexEntry{An R Package for read/wrting aspic files and plotting data from a variety of fish stock assessment programs}
+%\VignetteKeyword{aspic, diagnostics, IO, read, write}
+
+
+\documentclass[shortnames,nojss,article]{jss}
+
+\usepackage[onehalfspacing]{setspace}
+\usepackage{natbib} \bibliographystyle{plain}
+\usepackage{graphicx, psfrag, Sweave}
+\usepackage{enumerate}
+
+\usepackage{booktabs,flafter} %,thumbpdf}
+\usepackage{hyperref}
+
+%\newcommand{\code}[1]{\texttt{#1}}
+%\newcommand{\proglang}[1]{\textsf{#1}}
+%\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+\author{Laurence Kell\\ICCAT}
+\Plainauthor{Laurence Kell}
+
+\title{\pkg{ASPIC}: Biomass Dynamic Stock Assessment Model}
+\Plaintitle{ASPIC: Biomass Dynamic Stock Assessment Model}
+
+\Abstract{The \pkg{aspic} package is an implenentation of the ASPIC biomass dynamic stock assessment model in 
+R using the original \pkg{FORTRA} executable. The package provides tools for checking of diagnostics, projections, running Monte Carlo simulation and conducting Management Strategy Evaluation.}
+
+\Keywords{\proglang{R}, aspic, stock assessment}
+\Plainkeywords{R, aspic, stock assessment}
+
+\Address{
+  Laurence Kell \\
+  ICCAT Secretariat\\ 
+  C/Coraz\'{o}n de Mar\'{\i}a, 8. \\
+  28002 Madrid\\
+  Spain\\ 
+  
+  E-mail: \email{Laurie.Kell@iccat.int}
+}
+
+%% need no \usepackage{Sweave.sty}
+
+
+
+\begin{document}
+\input{aspic-concordance}
+
+
+
+\section{Introduction}
+
+%\textbf{Table}~\ref{tab:3}
+
+% <<label=Fig1,fig=TRUE, echo=TRUE, include=FALSE>>=
+% ggplot(aes(year,index),data=ddply(cpue, .(name,age), transform, index=minMax(index,na.rm=T))) +
+%   geom_point()                    +
+%   stat_smooth(,method="lm",se=F)  +
+%   facet_grid(age~name)           
+% @ 
+% \begin{figure}[h]\centering\includegraphics[width=1.0\textwidth]
+% {aspic-fig1}\caption{An example plot.}\label{fig:1}\end{figure}
+
+\section{Data}
+
+\section{Assessment}
+
+\section{Reference Points}
+
+\section{Monte Carlo Simulation}
+\subsection{Bootstrapping}
+\subsection{Jack knife}
+\subsection{MCMC}
+
+\section{Projection}
+
+\section{MSE}
+
+\end{document}
