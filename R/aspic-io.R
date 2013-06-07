@@ -315,6 +315,8 @@ aspicInp =function(x){
   
   aspicC=function(file) {  
     inp=scan(file,sep="\n",what=character())
+    inp=str_trim(sub("\t+"," ",inp))
+    
     ctrl=mlply(inp[5:21], function(x) {
       tmp=strsplit(x," ")
       tmp=unlist(tmp)[nchar(unlist(tmp))>0]})

@@ -9,9 +9,9 @@ setMethod("iter", signature(obj="aspic"),
             for(s. in names.)
             {
               if(dims(slot(obj, s.))$iter == 1)
-                slot(obj, s.) <- iter(slot(obj, s.), 1)
+                slot(obj, s.) <- FLCore:::iter(slot(obj, s.), 1)
               else
-                slot(obj, s.) <- iter(slot(obj, s.), iter)
+                slot(obj, s.) <- FLCore:::iter(slot(obj, s.), iter)
             }
             
             

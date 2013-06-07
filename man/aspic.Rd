@@ -22,9 +22,9 @@
   implements a biomass dynamic stock assessment model.
 }
 \section{Slots}{
-  \describe{ \item{\code{obj}: \code{factor} .}
-  \item{\code{conditioning}: \code{factor} .}
-  \item{\code{options}: \code{numeric} .}
+  \describe{ \item{\code{obj}: \code{factor} }
+  \item{\code{conditioning}: \code{factor} }
+  \item{\code{options}: \code{numeric} }
   \item{\code{index}: \code{data.frame} .}
   \item{\code{stopmess}: \code{character} .}
   \item{\code{rnd}: \code{numeric} .} \item{\code{model}:

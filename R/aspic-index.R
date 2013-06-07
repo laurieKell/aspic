@@ -31,6 +31,7 @@ setMethod('index',  signature(object='aspic'),
             if (length(unique(object@index[,"name"]))==1) return(FLQuant(object@index$index,dimnames=list(year=object@index$year)))
             else {res=dlply(object@index,.(name), with, FLQuant(index, dimnames=list(year=object@index$year)))
                   names(res)=unique(object@index[,"name"])
+                  return(FLQuants(res))
               }
             
             

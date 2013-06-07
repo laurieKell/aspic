@@ -131,28 +131,27 @@ setAs('biodyn','aspic',
 
 setAs('aspic', 'biodyn',
    function(from){
+
         sA=getSlots("aspic")
         sB=getSlots("biodyn")
-        
+
         sA=sA[!(names(sA) %in% c("model","params"))]
         sB=sB[!(names(sB) %in% c("model","params"))]
-       
+
         par=FLPar("r"=.6,"k"=c(params(from)["k"]),"b0"=c(params(from)["b0"]),"p"=1)
         par["r"]=c(params(from)["msy"]/(par["k"]*(1/(1+par["p"]))^(1/par["p"]+1)))
         res=biodyn(factor("pellat"),par)
-       
+
         res@control[c("p","b0"),1,1]=-1
-        
+       
         for (i in names(sA[(names(sA) %in% names(sB))]))
           slot(res,i)=slot(from,i)
-       
-        cpue=index(from,F)              
-        setParams( res)            =cpue
+     
+        cpue=index(from,F)        
+        setParams( res)            =cpue      
         setControl(res)            =params(res)
-        
         dimnames(res@objFn)$value=c("rss","ll")
         
-        return(res)}
-      )
+        return(res)})
 
 

@@ -94,6 +94,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
        }
   
   #oldwd =setExe(exeNm,package,dir)
+  #oldwd =setExe(exeNm,package,dir)
   oldwd=getwd()
   setwd(dir)
   biodyn:::exe("aspic")
@@ -121,7 +122,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
                }
           
         # create exe input files
-        .writeAspicInp(iter(object,i),what="FIT",niter=1,fl=paste(exeNm,".inp",sep=""))
+        .writeAspicInp(FLCore:::iter(object,i),what="FIT",niter=1,fl=paste(exeNm,".inp",sep=""))
     
         # run
         #system(paste("./", exeNm, paste(" ",exeNm,".inp",sep=""),sep=""))
@@ -134,7 +135,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         object@params[4:dim(object@params)[1],i]=rdat$estimates[8+seq(length(names(rdat$estimates))-length(rdat$estimates)+1)]
 
         names(rdat$t.series)=tolower(names(rdat$t.series))
-        iter(object@stock,i)=as.FLQuant(transform(rdat$t.series[,c("year","b")],data=b)[c("year","data")])[,dimnames(object@stock)$year]
+        FLCore:::iter(object@stock,i)=as.FLQuant(transform(rdat$t.series[,c("year","b")],data=b)[c("year","data")])[,dimnames(object@stock)$year]
         
         if (.Platform$OS!="windows"){
         try(object@objFn[2,i]<-rdat$diagnostics$obj.fn.value)        
@@ -227,7 +228,7 @@ setMethod('fit',  signature(object='aspics',index="missing"),
            function(object, dir=tempdir(), package=class(object), exeNm="aspic",jk=FALSE,
                     .combine=NULL,
                     .multicombine=T,.maxcombine=10,.packages="aspic"){
-          
+ 
              if (is.null(.combine)) ..combine=list else ..combine=.combine
              res=foreach(i=names(object), .combine=..combine,
                                       .multicombine=.multicombine,
