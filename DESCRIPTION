@@ -29,3 +29,4 @@ Collate:
     'aspic-profile.R'
     'aspic-index.R'
     'aspic-io.R'
+    'aspic-update.R'

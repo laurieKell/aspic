@@ -126,7 +126,7 @@ checkFile=function(x){
     cat(daply(u,.(name), with, length(name)),comment[22],file=fl,append=TRUE)
     d_ply(u,.(name), function(x) {
       cat(as.character(unique(x$name)),"\n",file=fl,append=TRUE)
-      cat("CC\n",file=fl,append=TRUE)
+      cat(as.character(x$code[1]),"\n",sep="",file=fl,append=TRUE)
       cat(apply(x[,c("year","index","catch")],1,paste, collapse=" "),sep="\n",file=fl,append=TRUE)})
     
 #     l_ply(index, 
