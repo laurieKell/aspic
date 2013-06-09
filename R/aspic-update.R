@@ -1,7 +1,7 @@
 uAspic=function(object,index,code="I1",bound=c(.01,100),add=TRUE){
 
   ## create new indices
-  res=rbind(cbind(expand.grid(year=index(object)$year,name=unique(index$name),index=0)),res)
+  res=rbind(cbind(expand.grid(year=index(object)$year,name=unique(index$name),index=0)),index)
   res=ddply(res,.(name,year), function(x) data.frame(index=sum(x$index)))
   res$index[res$index<=0]=NA
   res=cbind(res,code=code,catch=0)[,names(index(object))]

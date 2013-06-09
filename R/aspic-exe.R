@@ -132,8 +132,8 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
        
         #rdat$estimates
         object@params[c("b0","msy","k"),i]=rdat$estimates[c("B1.K","MSY","K")]       
-        object@params[4:dim(object@params)[1],i]=rdat$estimates[8+seq(length(names(rdat$estimates))-length(rdat$estimates)+1)]
-
+        object@params[4:dim(object@params)[1],i]=rdat$estimates[substr(names(rdat$estimates),1,2)=="q."]
+        
         names(rdat$t.series)=tolower(names(rdat$t.series))
         FLCore:::iter(object@stock,i)=as.FLQuant(transform(rdat$t.series[,c("year","b")],data=b)[c("year","data")])[,dimnames(object@stock)$year]
         
