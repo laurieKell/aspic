@@ -140,7 +140,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         if (.Platform$OS!="windows"){
         try(object@objFn[2,i]<-rdat$diagnostics$obj.fn.value)        
         #try(object@objFn[1,i]<-rdat$diagnostics$rsquare) 
-          
+         
         rtn=try(readAspic(paste(exeNm,"prn",sep=".")))
         if (is.data.frame(rtn)) object@diags=rtn
               
@@ -152,9 +152,9 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         } else {
           rtn=try(readAspic(paste(exeNm,"prn",sep=".")))
           if (is.data.frame(rtn)) object@diags=rtn
-          
+         
           object@diags=transform(object@diags,stock.  =  hat/c(object@params[grep("q",dimnames(params(object))$params)])[name],
-                                 stockHat=index/c(object@params[grep("q",dimnames(params(object))$params)])[name])
+                                 stockHat=hat/c(object@params[grep("q",dimnames(params(object))$params)])[name])
           object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock=object@stock,harvest=harvest(object))),drop=TRUE),all=T)
           object@diags$stock=object@diags$stock.
           object@diags=object@diags[,-10]
