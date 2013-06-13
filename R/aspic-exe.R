@@ -141,11 +141,11 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         try(object@objFn[2,i]<-rdat$diagnostics$obj.fn.value)        
         #try(object@objFn[1,i]<-rdat$diagnostics$rsquare) 
          
-        rtn=try(readAspic(paste(exeNm,"prn",sep=".")))
+        rtn=try(readAspic(paste(exeNm,"prn",sep="."))) 
         if (is.data.frame(rtn)) object@diags=rtn
-              
+          
         object@diags=transform(object@diags,stock.  =  hat/c(object@params[grep("q",dimnames(params(object))$params)])[name],
-                               stockHat=index/c(object@params[grep("q",dimnames(params(object))$params)])[name])
+                                            stockHat=index/c(object@params[grep("q",dimnames(params(object))$params)])[name])
         object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock=object@stock,harvest=harvest(object))),drop=TRUE),all=T)
         object@diags$stock=object@diags$stock.
         object@diags=object@diags[,-10]
@@ -165,6 +165,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         }
   
     if (dims(object)$iter!=1) object@diags=data.frame(NULL)
+
   
     setwd(oldwd)
    
@@ -243,3 +244,23 @@ setMethod('fit',  signature(object='aspics',index="missing"),
                names(res)=names(object)}
              
              res})
+
+setMethod('boot',  signature(object='aspics'),
+          function(object, dir=tempdir(), package=class(object), exeNm="aspic",boot=500,
+                   .combine=NULL,
+                   .multicombine=T,.maxcombine=10,.packages="aspic"){
+            
+            if (is.null(.combine)) ..combine=list else ..combine=.combine
+            res=foreach(i=names(object), .combine=..combine,
+                        .multicombine=.multicombine,
+                        .maxcombine  =.maxcombine,
+                        .packages    =.packages) %dopar% {  
+                          wkdir=tempfile('file', dir)
+                          dir.create(wkdir, showWarnings = FALSE)
+                          boot(object[[i]],dir=wkdir,boot=boot)}
+            
+            if (is.null(.combine)) {
+              res=aspics(res)
+              names(res)=names(object)}
+            
+            res})

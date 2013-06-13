@@ -66,7 +66,7 @@ paramFn=function(object){
   
   b2aParams=function(model,params) {
     
-    model=model(bd)
+    #model=model(bd)
     
     if(!(model %in% bdModel)) stop("has to be one of", bdModel)
     
@@ -146,10 +146,11 @@ setAs('aspic', 'biodyn',
        
         for (i in names(sA[(names(sA) %in% names(sB))]))
           slot(res,i)=slot(from,i)
-     
+   
         cpue=index(from,F)        
         setParams( res)            =cpue      
         setControl(res)            =params(res)
+
         dimnames(res@objFn)$value=c("rss","ll")
         
         return(res)})

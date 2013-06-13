@@ -1,3 +1,4 @@
+setGeneric("index",      function(object,...) standardGeneric('index'))
 setGeneric("index<-",    function(object,value,...) standardGeneric('index<-'))
 
 validIndex=function(x){
@@ -23,16 +24,18 @@ setMethod('index<-',  signature(object='aspic',value="data.frame"),
             return(object)})
 
 
-setMethod('index',  signature(object='aspic'),
+setMethod('index',signature(object='aspic'),
           function(object,df=TRUE) {
-            
+          
             if (df) return(object@index)
-            
-            if (length(unique(object@index[,"name"]))==1) return(FLQuant(object@index$index,dimnames=list(year=object@index$year)))
-            else {res=dlply(object@index,.(name), with, FLQuant(index, dimnames=list(year=object@index$year)))
+              
+            if (length(unique(object@index[,"name"]))==1) 
+              return(FLQuant(object@index$index,dimnames=list(year=object@index$year)))
+            else {
+                  res=dlply(object@index,.(name), with, FLQuant(index, dimnames=list(year=year)))
+               
                   names(res)=unique(object@index[,"name"])
                   return(FLQuants(res))
-              }
-            
+                  }           
             
             })

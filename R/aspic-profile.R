@@ -32,23 +32,24 @@
 setMethod("profile", signature(fitted="aspic"),
       function(fitted,which,
                    range=seq(0.5,1.5,length.out=21),
-                   fn   =function(x) cbind(model.frame(params(x)),model.frame(x@objFn)[,-3]),
-                   run  =TRUE,...){
+                   fn   =function(x) cbind(model.frame(params(x)),
+                                       model.frame(refpts(x)),
+                                       model.frame(x@objFn)[,-3],
+                                       rev(rev(model.frame(x@ll))[-1])),
+                   run=TRUE,...){
   
         if (dims(fitted)$iter>1) stop("can only be done for a single iter")
                  
-        fitted@control=propagate(fitted@control,length(range))
-       
         if (length(range)==1) range=c(range,2-range)
         
         sq=list(range)
         sq=do.call("expand.grid",sq[rep(1,length(which))])
+        names(sq)=which
         
-        for (i in seq(length(which))){         
-           fitted@control[which[i],"val"]=params(fitted)[which[i]]*sq[,i]
-           fitted@control[which[i],"min"]=min(fitted@control[which[i],"val"])*.1           
-           fitted@control[which[i],"max"]=max(fitted@control[which[i],"val"])*10
-           }
+        fitted@control=propagate(fitted@control,dim(sq)[1])
+        
+        for (i in which)
+           fitted@control[i,"val"]=params(fitted)[i,]*sq[,i]
         
         fitted@control[which,"fit"]=0
           
