@@ -100,16 +100,17 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
   biodyn:::exe("aspic")
   
   ## Jack knife if wished 
-  j=1
-  if (jk){
-    object=propagate(object,length(jkIdx(object@index)))
-    object@params=propagate(object@params,length(jkIdx(object@index)))
-    j   = jkIdx(object@index)
-    index=object@index}
+    j=1
+    if (jk){
+      object=propagate(object,length(jkIdx(object@index)))
+      object@params=propagate(object@params,length(jkIdx(object@index)))
+      j   = jkIdx(object@index)
+      index=object@index}
  
     us=paste("u",seq(length(dimnames(params(object))$params[grep("q",dimnames(params(object))$params)])),sep="")
-    object@ll=FLPar(NA,params=us,iter=seq(1))
-  
+    dmns=list(params=us,quantity=c("ll","ss","n"),iter=seq(1))
+    object@ll=FLPar(array(NA,dim=unlist(lapply(dmns,length)),dimnames=dmns))
+
     object=chkIters(object)
   
     for (i in seq(dims(object)$iter)){  
@@ -138,35 +139,43 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         FLCore:::iter(object@stock,i)=as.FLQuant(transform(rdat$t.series[,c("year","b")],data=b)[c("year","data")])[,dimnames(object@stock)$year]
         
         if (.Platform$OS!="windows"){
+          
         try(object@objFn[2,i]<-rdat$diagnostics$obj.fn.value)        
         #try(object@objFn[1,i]<-rdat$diagnostics$rsquare) 
          
         rtn=try(readAspic(paste(exeNm,"prn",sep="."))) 
-        if (is.data.frame(rtn)) object@diags=rtn
-          
+        if (is.data.frame(rtn)) object@diags=rtn[!is.na(rtn$residual),]
+
         object@diags=transform(object@diags,stock.  =  hat/c(object@params[grep("q",dimnames(params(object))$params)])[name],
                                             stockHat=index/c(object@params[grep("q",dimnames(params(object))$params)])[name])
-        object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock=object@stock,harvest=harvest(object))),drop=TRUE),all=T)
+        object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock  =iter(object@stock,   i),
+                                                                 harvest=iter(harvest(object),i))),drop=TRUE),all=T)
         object@diags$stock=object@diags$stock.
         object@diags=object@diags[,-10]
+        object@diags=object@diags[!is.na(object@diags$name),]
         } else {
-          rtn=try(readAspic(paste(exeNm,"prn",sep=".")))
-          if (is.data.frame(rtn)) object@diags=rtn
-         
+          rtn=try(readAspic(paste(exeNm,"prn",sep="."))) 
+          if (is.data.frame(rtn)) object@diags=rtn[!is.na(rtn$residual),]
+
           object@diags=transform(object@diags,stock.  =  hat/c(object@params[grep("q",dimnames(params(object))$params)])[name],
                                  stockHat=hat/c(object@params[grep("q",dimnames(params(object))$params)])[name])
           object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock=object@stock,harvest=harvest(object))),drop=TRUE),all=T)
           object@diags$stock=object@diags$stock.
           object@diags=object@diags[,-10]
-          try(object@objFn[2,i]<-sum(diags(object)$residual^2,na.rm=T))     
+          try(object@objFn[1,i]<-sum(diags(object)$residual^2,na.rm=T))     
+          object@diags=object@diags[!is.na(object@diags$name),]
           }            
-        
-        try(object@ll[,i]<-daply(object@diags, .(name), with, biodyn:::calcLogLik(residual[!is.na(residual)]))) #sum(residual^2,na.rm=T)/sum(count(!is.na(residual)))))
+       
+        dgs=subset(object@diags,!is.na(object@diags$residual))
+ 
+        try(object@ll@.Data[,"ll",i]<-daply(dgs, .(name), with, biodyn:::calcLogLik(residual,type=3)))
+        try(object@ll@.Data[,"ss",i]<-daply(dgs, .(name), with, sum(residual^2)))
+        try(object@ll@.Data[,"n", i]<-daply(dgs, .(name), function(x) dim(x)[1]))
+        print(daply(dgs, .(name), with, sum(residual^2)))
         }
   
-    if (dims(object)$iter!=1) object@diags=data.frame(NULL)
+    #if (dims(object)$iter!=1) object@diags=data.frame(NULL)
 
-  
     setwd(oldwd)
    
     return(object)}
@@ -238,11 +247,9 @@ setMethod('fit',  signature(object='aspics',index="missing"),
                                         wkdir=tempfile('file', dir)
                                         dir.create(wkdir, showWarnings = FALSE)
                                         fit(object[[i]],dir=wkdir)}
-             
              if (is.null(.combine)) {
                res=aspics(res)
-               names(res)=names(object)}
-             
+               names(res)=names(object)}           
              res})
 
 setMethod('boot',  signature(object='aspics'),

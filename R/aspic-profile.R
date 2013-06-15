@@ -4,11 +4,11 @@
 #' Performs a profile using residual sum of squares, fixes some parameters for a range of values 
 #' and then estimate the others 
 #'
-#' @param fitted: an \code{aspic} fitted
+#' @param fitted: an \code{aspic} object
 #' @param which: \code{character} giving the parameters to do the profile for, i.e. to fix.
 #' @param range; \code{numeric} relative values by which to vary parameter values, default seq(0.5,1.5,length.out=21). 
 #' @param fn: \code{function} that gives values to be profiled.
-#' @param run: \code{logical} if \code{TRUE} then returns profile, otherwise it just sets the control fitted-
+#' @param run: \code{logical} if \code{TRUE} then returns profile, otherwise it just sets the control object-
 #' 
 #' @return a \code{data frame} with results turned by \code{fn} by values in \code{which}. 
 #' @seealso \code{\link{biodyn},\link{fit}}
@@ -39,27 +39,30 @@ setMethod("profile", signature(fitted="aspic"),
                    run=TRUE,...){
   
         if (dims(fitted)$iter>1) stop("can only be done for a single iter")
-                 
+        
         if (length(range)==1) range=c(range,2-range)
         
-        sq=list(range)
-        sq=do.call("expand.grid",sq[rep(1,length(which))])
-        names(sq)=which
-        
-        fitted@control=propagate(fitted@control,dim(sq)[1])
-        
-        for (i in which)
-           fitted@control[i,"val"]=params(fitted)[i,]*sq[,i]
-        
-        fitted@control[which,"fit"]=0
+        if (dim(fitted@control)[3]==1){
+          sq=list(range)
+          sq=do.call("expand.grid",sq[rep(1,length(which))])
+          names(sq)=which
           
-        if (!run) return(fitted)
-        
-        res=fit(fitted)
-        
-        rtn=fn(res)
-        
-        return(rtn)})
+          fitted@control=propagate(fitted@control,dim(sq)[1])
+          
+          for (i in which)
+             fitted@control[i,"val"]=params(fitted)[i,]*sq[,i]
+          
+          fitted@control[which,"fit"]=0
+            
+          if (!run) return(fitted)
+          
+          res=fit(fitted)
+          
+          fitted=fn(res)}
+        else
+          fitted@control=profileGrid(fitted@control,which,range)
+          
+        return(fitted)})
 
 
 # ### debugging stuff
