@@ -263,7 +263,23 @@ aspicPrb =function(file,relative=TRUE){
   return(FLQuants(harvest=f.,stock=b.))}
 
 aspicRdat=function(file){            
-  return(dget(file))}
+  res=dget(file)
+  
+  names(res$estimates)=tolower(names(res$estimates))
+  
+  names(res$estimates)[seq(length(res$estimates))[names(res$estimates)=="b.bmsy"]]="bbmsy"
+  names(res$estimates)[seq(length(res$estimates))[names(res$estimates)=="f.fmsy"]]="ffmsy"
+  names(res$estimates)[seq(length(res$estimates))[names(res$estimates)=="yield.eq"]]="yieldeq"
+  names(res$estimates)[seq(length(res$estimates))[names(res$estimates)=="b1.k"]]  ="b0"
+  
+  names(res$t.series)=tolower(names(res$t.series))
+  names(res$t.series)[seq(length(res$t.series))[names(res$t.series)=="f.total"]]  ="harvest"
+  names(res$t.series)[seq(length(res$t.series))[names(res$t.series)=="b"]]        ="stock"
+  names(res$t.series)[seq(length(res$t.series))[names(res$t.series)=="l.tot.obs"]]="catch"
+  names(res$t.series)[seq(length(res$t.series))[names(res$t.series)=="f.fmsy"]]   ="ffmsy"
+  names(res$t.series)[seq(length(res$t.series))[names(res$t.series)=="b.bmsy"]]   ="bbmsy"
+
+  return(res)}
 
 aspicDet =function(x){  
   det=read.table(x,header=TRUE)
@@ -287,27 +303,6 @@ aspicDet =function(x){
   names(det)=dNms
   
   det}
-
-aspicPrn =function(x){
-  #x="/home/lkell/Dropbox/MyStuff/WHM/analysis/Inputs/aspic/Base case runs/whmrun1bb.prn"
-  res=read.table(x,header=TRUE)
-  
-  res=res[,seq(dim(res)[2]-2)]
-  
-  obs=melt(res[,seq((dim(res)[2]-1)/2+1)],id.var="year")
-  est=melt(res[,c(1,((dim(res)[2]-1)/2+2):dim(res)[2])],id.var="year")
-  
-  res=data.frame(transform(obs,obs=value,index=gsub(".obs","",obs$variable))[,c("year","index","obs")],
-                 hat=est$value)
-  
-  res$residual=log(res$obs/res$hat)
-  
-  res=ddply(res,.(index),fnDiags)
-  
-  names(res)[2]="index"
-  
-  res}
-
 
 aspicInp =function(x){
 
@@ -395,23 +390,24 @@ aspicInp =function(x){
 
   return(res)}
 
+
 aspicPrn =function(x){
   #x="/home/lkell/Dropbox/MyStuff/WHM/analysis/Inputs/aspic/Base case runs/whmrun1bb.prn"
-  res=read.table(x,header=TRUE)
-  
+  res=read.table(x,header=TRUE,colClasses="numeric") 
   res=res[,seq(dim(res)[2]-2)]
   
   obs=melt(res[,seq((dim(res)[2]-1)/2+1)],id.var="year")
   est=melt(res[,c(1,((dim(res)[2]-1)/2+2):dim(res)[2])],id.var="year")
   
-  res=data.frame(transform(obs,obs=value,index=gsub(".obs","",obs$variable))[,c("year","index","obs")],
+  res=data.frame(transform(obs,obs=value,name=gsub(".obs","",obs$variable))[,c("year","name","obs")],
                  hat=est$value)
   
+  if (is.factor(res$hat)) res$hat=as.numeric(as.character(res$hat))
   res$residual=log(res$obs/res$hat)
   
-  names(res)[2:3]=c("name","index")
-
   res=ddply(res,.(name),fnDiags)
+  
+  names(res)[3]="obs"
   
   res}
 

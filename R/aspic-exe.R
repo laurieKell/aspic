@@ -140,14 +140,15 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         
         if (.Platform$OS!="windows"){
           
-        try(object@objFn[2,i]<-rdat$diagnostics$obj.fn.value)        
-        #try(object@objFn[1,i]<-rdat$diagnostics$rsquare) 
+        try(object@objFn[1,i]<-rdat$diagnostics$obj.fn.value)        
+        #try(object@objFn[2,i]<-rdat$diagnostics$rsquare) 
          
-        rtn=try(readAspic(paste(exeNm,"prn",sep="."))) 
+        rtn=try(aspicPrn(paste(exeNm,"prn",sep="."))) 
         if (is.data.frame(rtn)) object@diags=rtn[!is.na(rtn$residual),]
-
-        object@diags=transform(object@diags,stock.  =  hat/c(object@params[grep("q",dimnames(params(object))$params)])[name],
-                                            stockHat=index/c(object@params[grep("q",dimnames(params(object))$params)])[name])
+        
+        object@diags=transform(object@diags,stock.  =hat/c(object@params[grep("q",dimnames(params(object))$params),i])[name],
+                                            stockHat=obs/c(object@params[grep("q",dimnames(params(object))$params),i])[name])
+              
         object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock  =iter(object@stock,   i),
                                                                  harvest=iter(harvest(object),i))),drop=TRUE),all=T)
         object@diags$stock=object@diags$stock.
@@ -157,21 +158,21 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
           rtn=try(readAspic(paste(exeNm,"prn",sep="."))) 
           if (is.data.frame(rtn)) object@diags=rtn[!is.na(rtn$residual),]
 
-          object@diags=transform(object@diags,stock.  =  hat/c(object@params[grep("q",dimnames(params(object))$params)])[name],
-                                 stockHat=hat/c(object@params[grep("q",dimnames(params(object))$params)])[name])
+          object@diags=transform(object@diags,stock.  =hat/c(object@params[grep("q",dimnames(params(object))$params),i])[name],
+                                 stockHat=obs/c(object@params[grep("q",dimnames(params(object))$params),i])[name])
+          
           object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock=object@stock,harvest=harvest(object))),drop=TRUE),all=T)
-          object@diags$stock=object@diags$stock.
+          #object@diags$stock=object@diags$stock.
           object@diags=object@diags[,-10]
           try(object@objFn[1,i]<-sum(diags(object)$residual^2,na.rm=T))     
           object@diags=object@diags[!is.na(object@diags$name),]
           }            
        
         dgs=subset(object@diags,!is.na(object@diags$residual))
- 
+
         try(object@ll@.Data[,"ll",i]<-daply(dgs, .(name), with, biodyn:::calcLogLik(residual,type=3)))
         try(object@ll@.Data[,"ss",i]<-daply(dgs, .(name), with, sum(residual^2)))
         try(object@ll@.Data[,"n", i]<-daply(dgs, .(name), function(x) dim(x)[1]))
-        print(daply(dgs, .(name), with, sum(residual^2)))
         }
   
     #if (dims(object)$iter!=1) object@diags=data.frame(NULL)
