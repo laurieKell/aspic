@@ -9,10 +9,10 @@ Description: ASPIC
 License: GPL-2
 LazyLoad: yes
 Depends:
-    R(>= 2.15.0),
-    biodyn,
-    stringr,
-    reshape,
+    R(>= 3.0.1),
+    biodyn(>=0.0.1),
+    stringr(>=0.6.2),
+    reshape(>=0.8.4),
 Collate:
     'aspic-class.R'
     'aspics.R'
