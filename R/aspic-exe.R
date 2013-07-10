@@ -149,8 +149,8 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         object@diags=transform(object@diags,stock.  =hat/c(object@params[grep("q",dimnames(params(object))$params),i])[name],
                                             stockHat=obs/c(object@params[grep("q",dimnames(params(object))$params),i])[name])
               
-        object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock  =iter(object@stock,   i),
-                                                                 harvest=iter(harvest(object),i))),drop=TRUE),all=T)
+        object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock  =object@stock,
+                                                                 harvest=harvest(object))),drop=TRUE),all=T)
         object@diags$stock=object@diags$stock.
         object@diags=object@diags[,-10]
         object@diags=object@diags[!is.na(object@diags$name),]
