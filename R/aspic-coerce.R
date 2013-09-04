@@ -119,8 +119,8 @@ setAs('biodyn','aspic',
         model(res) =aspic:::model[1]
         params(res)=FLPar("msy"=msy(from),"k"=c(params(from)["k"]),"b0"=c(params(from)["b0"]))
         
-        control(res)[c("b0","k"),c("min","val","max")]=control(from)[c("b0","k"),c("min","val","max")]
-        control(res)["msy",c("min","val","max")]=control(from)["r",-1]/c(control(from)["r",3])*c(msy(from))
+        res@control[c("b0","k"),c("min","val","max")]=from@control[c("b0","k"),c("min","val","max")]
+        res@control["msy",c("min","val","max")]=from@control["r",-1]/c(from@control["r",3])*c(msy(from))
         
         for (i in names(sA[(names(sA) %in% names(sB))]))
           slot(res,i)=slot(from,i)

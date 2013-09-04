@@ -121,21 +121,22 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
                object@index=index
                object@index[j[i],"index"]=NA
                }
-          
+                  
         # create exe input files
         .writeAspicInp(FLCore:::iter(object,i),what="FIT",niter=1,fl=paste(exeNm,".inp",sep=""))
-    
+   
         # run
         #system(paste("./", exeNm, paste(" ",exeNm,".inp",sep=""),sep=""))
         system(paste(exeNm, paste(" ",exeNm,".inp",sep=""),sep=""))
-        
-        rdat=dget(paste(exeNm,"rdat",sep="."))
        
+        rdat=dget(paste(exeNm,"rdat",sep="."))
+        
         #rdat$estimates
         object@params[c("b0","msy","k"),i]=rdat$estimates[c("B1.K","MSY","K")]       
         object@params[4:dim(object@params)[1],i]=rdat$estimates[substr(names(rdat$estimates),1,2)=="q."]
         
         names(rdat$t.series)=tolower(names(rdat$t.series))
+        
         FLCore:::iter(object@stock,i)=as.FLQuant(transform(rdat$t.series[,c("year","b")],data=b)[c("year","data")])[,dimnames(object@stock)$year]
         
         if (.Platform$OS!="windows"){
@@ -155,6 +156,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         object@diags=object@diags[,-10]
         object@diags=object@diags[!is.na(object@diags$name),]
         } else {
+   
           rtn=try(readAspic(paste(exeNm,"prn",sep="."))) 
           if (is.data.frame(rtn)) object@diags=rtn[!is.na(rtn$residual),]
 

@@ -32,10 +32,10 @@
 setMethod("profile", signature(fitted="aspic"),
       function(fitted,which,
                    range=seq(0.5,1.5,length.out=21),
-                   fn   =function(x) cbind(model.frame(params(x)),
-                                       model.frame(refpts(x)),
-                                       model.frame(x@objFn)[,-3],
-                                       rev(rev(model.frame(x@ll))[-1])),
+                   fn   =function(x) cbind(model.frame(params(x)), 
+                                           model.frame(refpts(x)),
+                                           model.frame(x@objFn)[,-3],
+                                           t(unlist(x@ll)[1,drop=T])),
                    run=TRUE,...){
   
         if (dims(fitted)$iter>1) stop("can only be done for a single iter")

@@ -104,7 +104,7 @@ setMethod('kobe', signature(object='aspic'),
             res=model.frame(mcf(FLQuants(stock   =stock(  object)%/%bmsy(object),
                                           harvest=harvest(object)%/%fmsy(object))))
                     
-            kobeFn(res,what,prob,year,nwrms)})
+            kobe:::kobeFn(res,what,prob,year,nwrms)})
 
 setMethod('kobe', signature(object='aspics'),
           function(object,what=c("sims","trks","pts","smry","wrms")[1],prob=c(0.75,0.5,.25),year=NULL,nwrms=10){
@@ -112,7 +112,7 @@ setMethod('kobe', signature(object='aspics'),
           res=ldply(object,  function(x) model.frame(mcf(FLQuants(stock  =stock(  x)%/%bmsy(x),
                                                                   harvest=harvest(x)%/%fmsy(x)))))
          
-          kobeFn(res,what,prob,year,nwrms)})
+          kobe:::kobeFn(res,what,prob,year,nwrms)})
 
 
 kobeMar=function(x,ds=seq(0,4,.001)){

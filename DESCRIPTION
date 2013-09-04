@@ -31,3 +31,4 @@ Collate:
     'aspic-io.R'
     'aspic-update.R'
     'aspic-kobe.R'
+    'aspic-setIndex.R'

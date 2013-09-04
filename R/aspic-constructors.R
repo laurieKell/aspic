@@ -21,7 +21,7 @@ setMethod('aspic', signature(object='missing'),
           })
 
 setMethod('aspic', signature(object="data.frame"),
-    function(object,r=0.25,...){
+    function(object,r=0.25,k=NA,msy=NA,...){
          
             args <- list(...)
             
@@ -30,7 +30,7 @@ setMethod('aspic', signature(object="data.frame"),
             res=new("aspic")
             
             if (all(c("year","catch") %in% nms)){
-              o=ddply(object, .(year), with, sum(catch))
+              o=ddply(object, .(year), with, sum(catch,na.rm=T))
               res@catch <- FLQuant(o$V1,dimnames=list(year=o$year))
               }
             
@@ -48,23 +48,15 @@ setMethod('aspic', signature(object="data.frame"),
             nms$params=c(nms$params,paste("q",seq(length(unique(object$name))),sep=""))
             
             res@params=FLPar(NA,dimnames=nms)
+            res@params["b0"] =1.0
+            if (is.na(msy)) res@params["msy"]=mean(res@catch,na.rm=T)       else res@params["msy"]=msy
+            if (is.na(k))   res@params["k"]  =mean(res@params["msy"])*4.0/r else res@params["k"]  =k
             
-            nms=dimnames(res@control)
-            nms$params=dimnames(res@params)[[1]]
-            nms$params=nms$params
+            res=fwd(res,catch=res@catch)
             
-            res@control=array(as.numeric(NA),dim=laply(nms[-3],length),dimnames=nms[-3])
-            res@control["b0", "val"]=1.0
-            res@control["msy","val"]=mean(res@catch,na.rm=T)
-            res@control["k",  "val"]=mean(res@control["msy","val"])*4.0/r
-     
-            res@control[-(1:3),"val"]=daply(res@index, .(name), with, 2*mean(index,na.rm=T))/res@control["k",  "start"]
+            setParams( res)=res@index
+            setControl(res)=res@params
             
-            res@control[,"min"] = res@control[,"val"]*0.01
-            res@control[,"max"] = res@control[,"val"]*100.0
-            res@control[,"fit"]    =1
-            res@control[,"lambda"] =1
-               
             res@control["b0","fit"]   =0
             res@control[1:3, "lambda"]=0
             
