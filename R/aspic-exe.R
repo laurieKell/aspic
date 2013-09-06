@@ -152,6 +152,9 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
               
         object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock  =object@stock,
                                                                  harvest=harvest(object))),drop=TRUE),all=T)
+        
+        object@diags$name=factor(object@diags$name, labels=unique(object@index$name))
+        
         object@diags$stock=object@diags$stock.
         object@diags=object@diags[,-10]
         object@diags=object@diags[!is.na(object@diags$name),]
@@ -161,7 +164,9 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
           if (is.data.frame(rtn)) object@diags=rtn[!is.na(rtn$residual),]
 
           object@diags=transform(object@diags,stock.  =hat/c(object@params[grep("q",dimnames(params(object))$params),i])[name],
-                                 stockHat=obs/c(object@params[grep("q",dimnames(params(object))$params),i])[name])
+                                              stockHat=obs/c(object@params[grep("q",dimnames(params(object))$params),i])[name])
+ 
+          object@diags$name=factor(object@diags$name, labels=unique(object@index$name))
           
           object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock=object@stock,harvest=harvest(object))),drop=TRUE),all=T)
           #object@diags$stock=object@diags$stock.
@@ -235,7 +240,6 @@ runBoot=function(object, package="aspic", exeNm=package, dir=tempdir(),boot=500)
   setwd(oldwd)
   
   return(object)}
-
 
 setMethod('fit',  signature(object='aspics',index="missing"),
            function(object, dir=tempdir(), package=class(object), exeNm="aspic",jk=FALSE,
