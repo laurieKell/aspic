@@ -1,3 +1,4 @@
+import("biodyn")
 exportClasses(aspic)
 exportClasses(aspics)
 exportMethods(aspic)
