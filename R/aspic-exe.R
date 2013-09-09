@@ -153,7 +153,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
         object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock  =object@stock,
                                                                  harvest=harvest(object))),drop=TRUE),all=T)
         
-        object@diags$name=factor(object@diags$name, labels=unique(object@index$name))
+        object@diags$name=ac(factor(object@diags$name, labels=unique(object@index$name)))
         
         object@diags$stock=object@diags$stock.
         object@diags=object@diags[,-10]
@@ -166,7 +166,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
           object@diags=transform(object@diags,stock.  =hat/c(object@params[grep("q",dimnames(params(object))$params),i])[name],
                                               stockHat=obs/c(object@params[grep("q",dimnames(params(object))$params),i])[name])
  
-          object@diags$name=factor(object@diags$name, labels=unique(object@index$name))
+          object@diags$name=ac(factor(object@diags$name, labels=unique(object@index$name)))
           
           object@diags=merge(object@diags,model.frame(mcf(FLQuants(stock=object@stock,harvest=harvest(object))),drop=TRUE),all=T)
           #object@diags$stock=object@diags$stock.

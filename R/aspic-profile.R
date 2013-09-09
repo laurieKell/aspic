@@ -64,6 +64,70 @@ setMethod("profile", signature(fitted="aspic"),
           
         return(fitted)})
 
+setMethod('profile',  signature(fitted='aspics'),
+          function(fitted,which,
+                   range=seq(0.5,1.5,length.out=21),
+                   fn   =function(x) cbind(model.frame(params(x)), 
+                                           model.frame(refpts(x)),
+                                           model.frame(x@objFn)[,-3],
+                                           t(unlist(x@ll)[1,drop=T])),
+                   run=TRUE,
+                   .combine=rbind.fill,
+                   .multicombine=T,.maxcombine=10,.packages="aspic"){
+            
+            if (!run) .combine=list
+
+            res=foreach(i=names(fitted), .combine=.combine,
+                        .multicombine=.multicombine,
+                        .maxcombine  =.maxcombine,
+                        .packages    =.packages) %dopar% {  
+                        
+                          profile(fitted[[i]],which=which,range=range,fn=fn,run=run)}
+            
+            if (!run) {
+              res=aspics(res)
+              names(res)=names(fitted)}
+            else
+              res=cbind(.id=rep(names(fitted),each=length(range)*length(which)),res)
+            
+            res})
+
+#' @description 
+#' Outputs as a data.frame a summary of parameters and RSS etc by data component 
+#' generated when do a profile
+#' 
+#' @param x: an \code{aspic} object
+#' 
+#' @return a \code{data frame} with results by data component. 
+#' @seealso \code{\link{biodyn},\link{profile} \link{fit}}
+#'
+#' @export
+#' @docType methods
+#' @rdname fnPiner
+#'
+#' @examples
+#' /dontrun{
+#' data(asp)
+#' dcK=profile(asp,which=c("k"),range=seq(0.2,2.0,length.out=21),fn=fnPiner)
+#' ggplot(dcK)+geom_line(aes(k,value,group=variable,col=variable))+
+#'  theme_ms(12,legend.position="bottom")+
+#'  ylab("Residual Sum of Squares")+xlab("K")
+#' 
+#' }       
+fnPiner=function(x) {
+  
+  res=cbind(model.frame(params(x),drop=T)[,-(dim(params(x))[1]+1)],
+            model.frame(refpts(x),drop=T)[,-c(1,4)],
+            model.frame(FLQuants(stock  =stock(  x)[,ac(range(x)["maxyear"])]%/%bmsy(x),
+                                 harvest=harvest(x)[,ac(range(x)["maxyear"])]%/%fmsy(x)),drop=T)[,-1],
+            model.frame(x@ll[,"ss"])[,seq(dim(x@ll)[1])]
+  )
+  
+  nms=dimnames(params(x))$params
+  res=melt(res,id=c(dimnames(refpts(x))$refpts[-1],nms,c("stock","harvest")))
+  
+  res=transform(res,name=unique(index(x)$name[res$variable]))
+  res}
 
 # ### debugging stuff
 # data(bd)
