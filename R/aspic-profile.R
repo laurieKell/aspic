@@ -126,7 +126,7 @@ fnPiner=function(x) {
   nms=dimnames(params(x))$params
   res=melt(res,id=c(dimnames(refpts(x))$refpts[-1],nms,c("stock","harvest")))
   
-  res=transform(res,name=unique(index(x)$name[res$variable]))
+  res=transform(res,name=unique(index(x)$name)[res$variable])
   res}
 
 # ### debugging stuff
