@@ -97,7 +97,6 @@ setIndexFn=function(object,value){
   
   res}
 
-
 setGeneric("setIndex<-",    function(object,value,...)   standardGeneric('setIndex<-'))
 setMethod('setIndex<-', signature(object='aspic',value="data.frame"), function(object,value) 
   setIndexFn(object,value))

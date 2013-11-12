@@ -49,16 +49,22 @@ setMethod("profile", signature(fitted="aspic"),
           
           fitted@control=propagate(fitted@control,dim(sq)[1])
           
-          for (i in which)
+          #fix min bounds for msy & k
+          for (i in which){
              fitted@control[i,"val"]=params(fitted)[i,]*sq[,i]
+             fitted@control[i,"min"]=min(fitted@control[i,"val"])*.9
+             fitted@control[i,"max"]=max(fitted@control[i,"val"])*1.1
+             fitted@control[i,"fit"]=0
+             
+             if (("k"   == i) & all(c("msy","k")%in%dimnames(fitted@control)$params))
+               fitted@control["msy","min"]=min(fitted@control["k","min"],fitted@control["msy","min"])*0.9
+             if (("msy" == i) & all(c("msy","k")%in%dimnames(fitted@control)$params))
+               fitted@control["msy","min"]=min(fitted@control["k","min"],fitted@control["msy","min"])*0.9
+             }
           
-          fitted@control[which,"fit"]=0
-            
           if (!run) return(fitted)
           
-          res=fit(fitted)
-          
-          fitted=fn(res)}
+          fitted=fn(fit(fitted))}
         else
           fitted@control=profileGrid(fitted@control,which,range)
           
@@ -72,23 +78,26 @@ setMethod('profile',  signature(fitted='aspics'),
                                            model.frame(x@objFn)[,-3],
                                            t(unlist(x@ll)[1,drop=T])),
                    run=TRUE,
-                   .combine=rbind.fill,
                    .multicombine=T,.maxcombine=10,.packages="aspic"){
             
-            if (!run) .combine=list
+            if (run) .combine=rbind.fill else .combine=list
 
             res=foreach(i=names(fitted), .combine=.combine,
                         .multicombine=.multicombine,
                         .maxcombine  =.maxcombine,
                         .packages    =.packages) %dopar% {  
                         
-                          profile(fitted[[i]],which=which,range=range,fn=fn,run=run)}
+                         profile(fitted[[i]],which=which,range=range,fn=fn,run=run)}
             
             if (!run) {
-              res=aspics(res)
+              res       =aspics(res)
               names(res)=names(fitted)}
-            else
-              res=cbind(.id=rep(names(fitted),each=length(range)*length(which)),res)
+            else {
+              ns =ldply(fitted, function(x) length(unique(index(x)[,"name"])))[,2]
+              ns =ns*length(range)*length(which)
+              ns =rep(seq(length(ns)),ns)
+              res=cbind(.id=names(fitted)[ns],res)
+              }
             
             res})
 

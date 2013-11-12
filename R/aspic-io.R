@@ -74,7 +74,7 @@ checkFile=function(x){
    u=merge(dmmy,index,all=TRUE,sort=FALSE)   
    u$index[is.na(u$index)]=-9999
    u$catch[is.na(u$catch)]=0
-      
+     
     comment=rep("",22)
     comment[ 1]= "\n"                                                                                               
     comment[ 2]= "\n"                                                                                               
@@ -124,7 +124,11 @@ checkFile=function(x){
     cat(as.integer(object@rnd)                           ,comment[21],file=fl,append=TRUE)
  
     cat(daply(u,.(name), with, length(name)),comment[22],file=fl,append=TRUE)
+  
     d_ply(u,.(name), function(x) {
+      if(any(names(x)=="type"))
+        names(x)[seq(length(names(x)))[names(x)=="type"]]="code"
+        
       cat(as.character(unique(x$name)),"\n",file=fl,append=TRUE)
       cat(as.character(x$code[1]),"\n",sep="",file=fl,append=TRUE)
       cat(apply(x[,c("year","index","catch")],1,paste, collapse=" "),sep="\n",file=fl,append=TRUE)})
