@@ -32,3 +32,16 @@ setMethod("plot", signature(x="aspics", y="missing"),
 # @param  \code{size}, thinkness of percentile lines
 # @param  \code{lty}, line type for percentiles
 # @param \code{facet}, a layer that determines the facetting of the plot
+
+
+plotSP=function(object,biomass=FLQuant(seq(0,max(params(object)["k"]),length.out=101))) {
+  object=as(object,"biodyn")
+  if ((dims(object)$iter>1 | dims(params(object))$iter>1) & dims(biomass)$iter==1) 
+    biomass=propagate(biomass,max(dims(object)$iter,dims(params(object))$iter))
+  
+  p <-  ggplot(model.frame(FLQuants(stock=biomass, yield=FLQuant(computeSP(object,biomass))))) +
+    geom_line(aes(stock, yield, group=iter, col=iter)) +
+    geom_point(aes(bmsy,msy,col=iter),size=2,data=cast(as.data.frame(refpts(object)),iter~refpts,value="data")) +
+    xlab("Stock") + ylab("Surplus Production")
+  print(p)
+  invisible(p)} 
