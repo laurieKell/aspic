@@ -65,14 +65,14 @@ checkFile=function(x){
   }
   
 .writeAspicInp<-function(object,index=object@index,what="FIT",niter=ifelse(what=="FIT",1,501),fl="aspic.inp"){
-  system("rm aspic.fit")
-  system("rm aspic.inp")
-  system("rm aspic.prn")
-  system("rm aspic.rdat")
-  system("rm aspic.sum")
   dgts=options()$digits
    options(digits=22)
-   
+  
+   if (file.exists("aspic.fit")) system("rm aspic.fit")
+   if (file.exists("aspic.fit")) system("rm aspic.prn")
+   if (file.exists("aspic.fit")) system("rm aspic.rdat")
+   if (file.exists("aspic.fit")) system("rm aspic.sum")
+  
    dmmy=expand.grid(year=min(as.numeric(as.character(index$year))):max(as.numeric(as.character(index$year))),
                     name=unique(index$name))[,2:1]
   
@@ -150,7 +150,7 @@ checkFile=function(x){
 
    
     options(digits=dgts)
-   
+
     return()}
 
 
