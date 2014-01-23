@@ -65,8 +65,12 @@ checkFile=function(x){
   }
   
 .writeAspicInp<-function(object,index=object@index,what="FIT",niter=ifelse(what=="FIT",1,501),fl="aspic.inp"){
-   system("rm *")
-   dgts=options()$digits
+  system("rm aspic.fit")
+  system("rm aspic.inp")
+  system("rm aspic.prn")
+  system("rm aspic.rdat")
+  system("rm aspic.sum")
+  dgts=options()$digits
    options(digits=22)
    
    dmmy=expand.grid(year=min(as.numeric(as.character(index$year))):max(as.numeric(as.character(index$year))),
