@@ -127,6 +127,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
    
         # run
         #system(paste("./", exeNm, paste(" ",exeNm,".inp",sep=""),sep=""))
+        print(paste("aspic", paste(" ","aspic",".inp",sep=""),sep=""))
         system(paste("aspic", paste(" ","aspic",".inp",sep=""),sep=""))
         #system(paste(exeNm, paste(" ",exeNm,".inp",sep=""),sep=""))
         
