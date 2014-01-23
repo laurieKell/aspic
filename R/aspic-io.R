@@ -65,6 +65,7 @@ checkFile=function(x){
   }
   
 .writeAspicInp<-function(object,index=object@index,what="FIT",niter=ifelse(what=="FIT",1,501),fl="aspic.inp"){
+   system("rm *")
    dgts=options()$digits
    options(digits=22)
    
