@@ -68,10 +68,10 @@ checkFile=function(x){
   dgts=options()$digits
    options(digits=22)
   
-   if (file.exists("aspic.fit"))  system("rm aspic.fit")
-   if (file.exists("aspic.prn"))  system("rm aspic.prn")
-   if (file.exists("aspic.rdat")) system("rm aspic.rdat")
-   if (file.exists("aspic.sum"))  system("rm aspic.sum")
+   if (file.exists("aspic.fit"))  file.remove("aspic.fit")
+   if (file.exists("aspic.prn"))  file.remove("aspic.prn")
+   if (file.exists("aspic.rdat")) file.remove("aspic.rdat")
+   if (file.exists("aspic.sum"))  file.remove("aspic.sum")
   
    dmmy=expand.grid(year=min(as.numeric(as.character(index$year))):max(as.numeric(as.character(index$year))),
                     name=unique(index$name))[,2:1]
