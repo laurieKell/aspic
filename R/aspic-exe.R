@@ -101,7 +101,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copy
   
   
   if (.Platform$OS.type == "windows" & copyExe) 
-    file.copy(paste(paste(system.file("bin", "linux", package=package, mustWork=TRUE),exeNm, sep="/"),"exe",sep="."), dir)
+    file.copy(paste(paste(system.file("bin", "windows", package=package, mustWork=TRUE),exeNm, sep="/"),"exe",sep="."), dir)
   else  if (copyExe)                            
     file.copy(     paste(system.file("bin", "linux", package=package, mustWork=TRUE),exeNm, sep="/"),                 dir)
   
