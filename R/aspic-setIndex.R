@@ -5,7 +5,6 @@ setMethod('setParams<-', signature(object='aspic',value="data.frame"), function(
   object@params=object@params[nms]
   
   params =biodyn:::setQ(object,value)
-  #params =biodyn:::setQ(object,value)
   
   params =params[dimnames(params)$params[substr(dimnames(params)$params,1,5)!="sigma"]]
   
@@ -91,7 +90,7 @@ setIndexFn=function(object,value){
   
   res@stock=object@stock
   
-  ## add q´s
+  ## add q??s
   setParams( res)=value
   setControl(res)=params(res)
   
