@@ -13,8 +13,8 @@
 #'     data(asp)
 #'     asp=fit(asp)}
 setMethod('fit',  signature(object='aspic',index="missing"),
-          function(object, dir=tempdir(), package=class(object), exeNm="aspic",jk=FALSE)
-            runExe(object=object, dir=dir, package=package, exeNm=exeNm,jk=jk))
+          function(object, dir=tempdir(), package=class(object), exeNm="aspic",jk=FALSE,copyExe=FALSE)
+            runExe(object=object, dir=dir, package=package, exeNm=exeNm,jk=jk,copyExe=copyExe))
 
 
 #' jk, jack knifes \code{aspic} 
@@ -81,7 +81,7 @@ chkIters=function(object){
 
 jkIdx=function(x) dimnames(x)[[1]][ !is.na(x$index)]
 
-runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
+runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copyExe=FALSE){
  
   object@index=object@index[object@index$year %in% range(object)["minyear"]:range(object)["maxyear"],]
  
@@ -97,7 +97,13 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE){
   #oldwd =setExe(exeNm,package,dir)
   oldwd=getwd()
   setwd(dir)
-  biodyn:::exe("aspic")
+  path=biodyn:::exe("aspic")
+  
+  
+  if (.Platform$OS.type == "windows" & copyExe) 
+    file.copy(paste(paste(system.file("bin", "linux", package=package, mustWork=TRUE),exeNm, sep="/"),"exe",sep="."), dir)
+  else  if (copyExe)                            
+    file.copy(     paste(system.file("bin", "linux", package=package, mustWork=TRUE),exeNm, sep="/"),                 dir)
   
   ## Jack knife if wished 
     j=1
