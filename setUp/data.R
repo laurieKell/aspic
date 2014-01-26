@@ -1,0 +1,6 @@
+library(aspic)
+albn=fit(aspic("/home/laurie/Desktop/flr/git/aspic/inst/extdata/swon.inp"))
+albn=fit(aspic("/home/laurie/Desktop/flr/git/aspic/inst/extdata/albn.inp"))
+swon=fit(aspic("/home/laurie/Desktop/flr/git/aspic/inst/extdata/swon.inp"))
+save(albn,file="/home/laurie/Desktop/flr/git/aspic/data/albn.RData")
+save(swon,file="/home/laurie/Desktop/flr/git/aspic/data/swon.RData")
