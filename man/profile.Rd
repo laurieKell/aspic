@@ -51,7 +51,7 @@
 \dontrun{
     data(asp)
     asp=jk(asp)}
-/dontrun{
+\dontrun{
 data(asp)
 res=profile(asp,which="msy",fixed="b0",maxsteps=31,range=c(0.5,1.1))
 ggplot(res)+geom_line(aes(k,rss))
