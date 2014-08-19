@@ -65,28 +65,9 @@ running Monte Carlo simulation and conducting Management Strategy Evaluation.}
 %% need no \usepackage{Sweave.sty}
 
 
-<<prelim,echo=FALSE,print=FALSE>>=
-options(digits=2)
-
-library(diags)
-library(kobe)
-library(aspic)
-
-stampIt=function(...){
-   require(plyr)
-
-   args=list(...)
-   
-   ldply(args, function(x) { res=packageDescription(x)
-                            c(Package=x,
-                              Version=packageDescription(x)$Version,
-                              Date   =packageDescription(x)$Date)})}
-
-smry=stampIt("kobe","aspic")
-@
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+\input{aspic-concordance}
 
 \newpage\tableofcontents\newpage
 
@@ -102,28 +83,14 @@ Making \pkg{aspic} available as a pakage allows it to be used with other package
 as part of the FLR tools for management strategy evaluation \cite{kell_evaluation_1999}; see 
 \citep{kell2013mpalbn,kell2013diagalbn,kell2013diagalbs,kell2013msealbn,kell2013msealbn,kell2013fwdalbn,kell2013diagswon,kell2013diagswos,kell2013fwdswon,kell2013profile,kell2013uncert}
 
-\pkg{aspic} depends upon the \cite{biodyn} package, which contains the methods for checking of diagnostics, projections, running Monte Carlo simulation and conducting Management Strategy Evaluation.
-
-There are example data sets based North Atlantic albacore and swordfish assessments \cite{scrs2013} e.g.
-
-<<eval=FALSE>>=
-library(aspic)
-
-## r data sets
-data(swon)
-data(albn)
-@ 
-\end{shaded}\end{minipage}\end{center}\end{mylisting}
-
-Various text files can be found in the \code{exdata} directory of the package
-
+\pkg{aspic} depends upon the \cite{biodyn} package, which contains most of the methods for  
 \section{Data}
 
-Catch and catch per unit effort (CPUE) are used to estimate model parameters by minimising the residual 
-sum of squares from the fit observed CPUE using the simplex algorithm. The parameters estimated are catchability (q) by CPUE series and 
-the parameters of the suplus production function. 
+\pkg{aspic} uses data on catch and catch per unit effort (CPUE) to estimate model parameters using the simplex algorithm to minimise the residual 
+sum of squares from the fit observed CPUE. The parameters estimated are catchability (q) by fleet and the parameters of the suplus production 
+function. 
 
-Data can either be provided as a data.frame or as a text input file. 
+Data can either be provided as a data.frame or as a test input file. 
 
 \subsection{R}
 
@@ -131,10 +98,24 @@ The best way is to provide input data as a data.frame, with columms for \code{ye
 later column indicates the type of index (\textbf{Table} \ref{code}).
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-head(swon)
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> library(aspic)
+> ### Assessments
+> ## 1 file
+> aspic=readASPIC(paste(dirAspic,"/",scen=scen[1],".bio",sep=""))
+> class(aspic)
+> names(aspic)
+> aspic=readASPIC(paste(dirAspic,"/",scen=scen[1],".bio",sep=""),data.frame=T)
+> class(aspic)
+> names(aspic)
+> ## many files
+> aspics=readASPIC(dirAspic,scen=scen,type="b",data.frame=T)
+> 
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
+
 
 
 \subsection{Files}
@@ -149,172 +130,169 @@ There are six types of files, i.e.\\
 
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-library(FLAdvice)
-
-### Assessments
-## 1 file
-aspic=readASPIC(paste(dirAspic,"/",scen=scen[1],".bio",sep=""))
-class(aspic)
-names(aspic)
-
-aspic=readASPIC(paste(dirAspic,"/",scen=scen[1],".bio",sep=""),data.frame=T)
-class(aspic)
-names(aspic)
-
-## many files
-aspics=readASPIC(dirAspic,scen=scen,type="b",data.frame=T)
-
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> library(FLAdvice)
+> ### Assessments
+> ## 1 file
+> aspic=readASPIC(paste(dirAspic,"/",scen=scen[1],".bio",sep=""))
+> class(aspic)
+> names(aspic)
+> aspic=readASPIC(paste(dirAspic,"/",scen=scen[1],".bio",sep=""),data.frame=T)
+> class(aspic)
+> names(aspic)
+> ## many files
+> aspics=readASPIC(dirAspic,scen=scen,type="b",data.frame=T)
+> 
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-#### Projections
-## 1 file
-prj=readASPIC(paste(dirAspic,"/","bumcont1bproj500",".prj",sep=""))
-class(prj)
-names(prj)
-
-prj=readASPIC(paste(dirAspic,"/","bumcont1bproj500",".prj",sep="",data.frame))
-class(prj)
-names(prj)
-
-## many
-prjs=readASPIC(dirAspic,scen=expand.grid(scen=c("bumcont1bproj","bumhighpproj"),TAC=seq(0,6000,500)))
-class(prjs)
-names(prjs)
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> #### Projections
+> ## 1 file
+> prj=readASPIC(paste(dirAspic,"/","bumcont1bproj500",".prj",sep=""))
+> class(prj)
+> names(prj)
+> prj=readASPIC(paste(dirAspic,"/","bumcont1bproj500",".prj",sep="",data.frame))
+> class(prj)
+> names(prj)
+> ## many
+> prjs=readASPIC(dirAspic,scen=expand.grid(scen=c("bumcont1bproj","bumhighpproj"),TAC=seq(0,6000,500)))
+> class(prjs)
+> names(prjs)
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \subsection{R}
 
 There is an example text data set 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-
-dirInp=paste(system.file(package="aspic"),"extdata",sep="/")
-asp=aspic(paste(dirInp,"albn.inp",sep="/"))
-asp=fit(asp)
-
-key=data.frame(
-  name   =c("Troll Composite CPUE","JLL Old","JLL Modern","CT Old","CT Modern"), 
-  series=c("I","I","II","I","II"),
-  flag  =c("OT","JA","JA","CT","CT"),
-  gear  =c("TR","LL","LL","LL","LL"))
-
-dimnames(key)[[1]]=c("Troll Composite CPUE","JLL Old","JLL Modern","CT Old","CT Modern") 
-
-wts=t(array(c(1,1,1,1,1,
-              1,0,0,0,0,
-              0,1,1,0,0,
-              0,0,0,1,1),c(5,4),list(name=key$name,Scenario=1:4)))
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> dirInp=paste(system.file(package="aspic"),"extdata",sep="/")
+> asp=aspic(paste(dirInp,"albn.inp",sep="/"))
+> asp=fit(asp)
+> key=data.frame(
++   name   =c("Troll Composite CPUE","JLL Old","JLL Modern","CT Old","CT Modern"), 
++   series=c("I","I","II","I","II"),
++   flag  =c("OT","JA","JA","CT","CT"),
++   gear  =c("TR","LL","LL","LL","LL"))
+> dimnames(key)[[1]]=c("Troll Composite CPUE","JLL Old","JLL Modern","CT Old","CT Modern") 
+> wts=t(array(c(1,1,1,1,1,
++               1,0,0,0,0,
++               0,1,1,0,0,
++               0,0,0,1,1),c(5,4),list(name=key$name,Scenario=1:4)))
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-cpue=subset(diags(asp),!is.na(obs))[,c("year","name","obs")]
-ggplot(aes(year,obs,group=name,col=name),data=cpue)+
-  geom_point()+
-  stat_smooth()+
-  theme_ms(legend.position="bottom")
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> cpue=subset(diags(asp),!is.na(obs))[,c("year","name","obs")]
+> ggplot(aes(year,obs,group=name,col=name),data=cpue)+
++   geom_point()+
++   stat_smooth()+
++   theme_ms(legend.position="bottom")
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-library(gam)
-gm  =gam(log(obs)~lo(year)+name,data=cpue)
-cpue=data.frame(cpue,gam=predict(gm),gamRsdl=residuals(gm))
-scl =coefficients(gm)[3:9]
-names(scl)=substr(names(scl),5,nchar(names(scl)))
-cpue=transform(cpue,scl=scl[as.character(name)])
-cpue[is.na(cpue$scl),"scl"]=0
-
-cpue=cbind(cpue,key[cpue$name,])[,-2]
-cpue$name=factor(cpue$name, levels=c("Troll Composite CPUE","JLL Old","JLL Modern","CT Old","CT Modern"))
-ggplot(cpue)+ geom_line(aes(year,exp(gam)),col="red")  +
-              geom_smooth(aes(year,obs),se=FALSE)      +           
-              geom_point( aes(year,obs,col=name))       +
-              facet_wrap(~name,ncol=1,scale="free_y")  +
-              theme_ms(legend.position="none")         +
-              xlab("Year") + ylab("Index")
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> library(gam)
+> gm  =gam(log(obs)~lo(year)+name,data=cpue)
+> cpue=data.frame(cpue,gam=predict(gm),gamRsdl=residuals(gm))
+> scl =coefficients(gm)[3:9]
+> names(scl)=substr(names(scl),5,nchar(names(scl)))
+> cpue=transform(cpue,scl=scl[as.character(name)])
+> cpue[is.na(cpue$scl),"scl"]=0
+> cpue=cbind(cpue,key[cpue$name,])[,-2]
+> cpue$name=factor(cpue$name, levels=c("Troll Composite CPUE","JLL Old","JLL Modern","CT Old","CT Modern"))
+> ggplot(cpue)+ geom_line(aes(year,exp(gam)),col="red")  +
++               geom_smooth(aes(year,obs),se=FALSE)      +           
++               geom_point( aes(year,obs,col=name))       +
++               facet_wrap(~name,ncol=1,scale="free_y")  +
++               theme_ms(legend.position="none")         +
++               xlab("Year") + ylab("Index")
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-uMat=ddply(cpue,.(name),transform, obs=stdz(obs))
-uMat=cast(uMat,year~name,value="obs")
-uMat=uMat[apply(uMat,1,function(x) !all(is.na(x))),]
-
-pM=plotmatrix(uMat[,-1])
-pM$layers[[2]]=NULL
-mns=ddply(subset(pM$data,!(is.na(x) & !is.na(y))),.(xvar,yvar), function(x) mean(x$y,na.rm=T))
-pM+geom_hline(aes(yintercept=V1),data=mns,col="red") +
-   geom_smooth(method="lm",se=F)  + 
-   theme(legend.position="bottom")                   +
-   xlab("Index")+ylab("Index")      
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> uMat=ddply(cpue,.(name),transform, obs=stdz(obs))
+> uMat=cast(uMat,year~name,value="obs")
+> uMat=uMat[apply(uMat,1,function(x) !all(is.na(x))),]
+> pM=plotmatrix(uMat[,-1])
+> pM$layers[[2]]=NULL
+> mns=ddply(subset(pM$data,!(is.na(x) & !is.na(y))),.(xvar,yvar), function(x) mean(x$y,na.rm=T))
+> pM+geom_hline(aes(yintercept=V1),data=mns,col="red") +
++    geom_smooth(method="lm",se=F)  + 
++    theme(legend.position="bottom")                   +
++    xlab("Index")+ylab("Index")      
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-cr=cor(uMat[,-1],use="pairwise.complete.obs")
-dimnames(cr)=list(gsub("_"," ",names(uMat)[-1]),gsub("_"," ",names(uMat)[-1]))
-cr[is.na(cr)]=0
-corrplot(cr,diag=F,order="hclust",addrect=2)  +          
-             theme(legend.position="bottom")  
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> cr=cor(uMat[,-1],use="pairwise.complete.obs")
+> dimnames(cr)=list(gsub("_"," ",names(uMat)[-1]),gsub("_"," ",names(uMat)[-1]))
+> cr[is.na(cr)]=0
+> corrplot(cr,diag=F,order="hclust",addrect=2)  +          
++              theme(legend.position="bottom")  
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \section{Assessment}
 
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-asp=fit(asp)
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> asp=fit(asp)
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-plot(asp)
-@ 
+\begin{Schunk}
+\begin{Sinput}
+> plot(asp)
+\end{Sinput}
+\end{Schunk}
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \section{Diagnostics}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \section{Reference Points}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \section{Fitting}
@@ -335,8 +313,6 @@ There are various standard plots, i.e. for fitted time series, reference points 
 \subsection{Bootstrapping}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 
@@ -345,22 +321,16 @@ There are various standard plots, i.e. for fitted time series, reference points 
 \subsection{Reference points}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \subsection{Projections}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \subsection{Harvest Control Rules}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \section{Advice}
@@ -368,8 +338,6 @@ There are various standard plots, i.e. for fitted time series, reference points 
 \subsection{Kobe Framework}
 
 \begin{mylisting}\begin{center}\begin{minipage}[H]{0.95\textwidth}\begin{shaded} 
-<<eval=FALSE>>=
-@ 
 \end{shaded}\end{minipage}\end{center}\end{mylisting}
 
 \section{MSE}

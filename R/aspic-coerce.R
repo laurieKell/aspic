@@ -9,7 +9,7 @@ setMethod('aspic', signature(object="FLStock"),
       dmns=dimnames(res@params)
       dmns$params=c(dmns$params,"q1")
       
-      res@params=FLPar(NA,dimnames=dmns)
+      res@params=FLPar(as.numeric(NA),dimnames=dmns)
       res@params[]=c(1,mean(res@catch),4*mean(res@catch), mean(res@index$index/res@index$catch)*.2)
       
       res@control[,"val"]=res@params
@@ -151,6 +151,43 @@ setAs('aspic', 'biodyn',
         setParams( res)            =cpue      
         setControl(res)            =params(res)
 
+        dimnames(res@objFn)$value=c("rss","ll")
+        
+        return(res)})
+
+  
+#   dat <- edat(harvest = albsa$catch_tonnes, 
+#               index   = cbind(fleet1 = albsa$fleet1_cpue,
+#                             fleet2 = albsa$fleet2_cpue, fleet3 = albsa$fleet3_cpue, fleet4 = albsa$fleet4_cpue,
+#                             fleet8 = albsa$fleet8_cpue), time = rownames(albsa))
+#   time
+#   n
+#   sigmao
+#   sigmap
+#   renormalise=TRUE
+  
+setAs('aspic', 'edat',
+      function(from){
+        
+        sA=getSlots("aspic")
+        sB=getSlots("biodyn")
+        
+        sA=sA[!(names(sA) %in% c("model","params"))]
+        sB=sB[!(names(sB) %in% c("model","params"))]
+        
+        par=FLPar("r"=.6,"k"=c(params(from)["k"]),"b0"=c(params(from)["b0"]),"p"=1)
+        par["r"]=c(params(from)["msy"]/(par["k"]*(1/(1+par["p"]))^(1/par["p"]+1)))
+        res=biodyn(factor("pellat"),par)
+        
+        res@control[c("p","b0"),1,1]=-1
+        
+        for (i in names(sA[(names(sA) %in% names(sB))]))
+          slot(res,i)=slot(from,i)
+        
+        cpue=index(from,F)        
+        setParams( res)            =cpue      
+        setControl(res)            =params(res)
+        
         dimnames(res@objFn)$value=c("rss","ll")
         
         return(res)})

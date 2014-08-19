@@ -107,13 +107,13 @@ setClass('aspic', representation(
     conditioning  =factor("YLD",     levels=conditioning,labels=conditioning),
     options       =c(search=1,trials=100000,simplex=1e-8,restarts=3e-8,nrestarts=6,effort=1e-4,nsteps=0,maxf=8.0),
    
-    params        =FLPar(NA,dimnames=list(params=c("b0","msy","k"),iter=1)),
-    control       =FLPar(NA,c(length(c(c("b0","msy","k"),paste("q",seq(1),sep=""))),5),
+    params        =FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),iter=1)),
+    control       =FLPar(as.numeric(NA),c(length(c(c("b0","msy","k"),paste("q",seq(1),sep=""))),5),
                          dimnames=list(params=c(c("b0","msy","k"),paste("q",seq(1),sep="")),
                                               c("fit","min","val","max","lambda"),iter=1)),
-    objFn         =FLPar(array(NA,dim=c(2,1),dimnames=list("value"=c("rss","rsq"),iter=1))),
-    vcov          =FLPar(NA,dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1)),
-    hessian       =FLPar(NA,dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1)),
+    objFn         =FLPar(array(as.numeric(NA),dim=c(2,1),dimnames=list("value"=c("rss","rsq"),iter=1))),
+    vcov          =FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1)),
+    hessian       =FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1)),
     stopmess      ="not ran"),
   validity=validAspic)
 

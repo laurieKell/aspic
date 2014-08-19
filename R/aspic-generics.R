@@ -17,4 +17,5 @@ setGeneric("writeAspic",   function(object,...)   standardGeneric('writeAspic'))
 setGeneric('boot',  function(object,...)     standardGeneric('boot'))
 setGeneric('jk',    function(object,...)     standardGeneric('jk'))
 
+setGeneric('kobe', function(object,method,...) standardGeneric('kobe'))
 

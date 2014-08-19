@@ -78,7 +78,7 @@ setMethod('profile',  signature(fitted='aspics'),
                                            model.frame(x@objFn)[,-3],
                                            t(unlist(x@ll)[1,drop=T])),
                    run=TRUE,
-                   .multicombine=T,.maxcombine=10,.packages="aspic"){
+                   .multicombine=T,.maxcombine=10,.packages=c("aspic","plyr")){
             
             if (run) .combine=rbind.fill else .combine=list
 

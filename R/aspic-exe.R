@@ -9,9 +9,14 @@
 #' @seealso \code{\link{aspic},\link{biodyn},\link{boot},\link{jk}}
 #' @export
 #' @examples
-#' \dontrun{
-#'     data(asp)
-#'     asp=fit(asp)}
+#'     ## get aspic input file (i.e. *.inp) for North Atlantic swordfish
+#'     file=paste(system.file(package="aspic"),"exdata/swon.inp",sep="/")
+#'     
+#'     swon=aspic(file)
+#'     
+#'     swon=fit(swon)
+#'     
+#'     plot(swon)
 setMethod('fit',  signature(object='aspic',index="missing"),
           function(object, dir=tempdir(), package=class(object), exeNm="aspic",jk=FALSE,copyExe=FALSE)
             runExe(object=object, dir=dir, package=package, exeNm=exeNm,jk=jk,copyExe=copyExe))
@@ -252,7 +257,7 @@ runBoot=function(object, package="aspic", exeNm=package, dir=tempdir(),boot=500)
 setMethod('fit',  signature(object='aspics',index="missing"),
            function(object, dir=tempdir(), package=class(object), exeNm="aspic",jk=FALSE,
                     .combine=NULL,
-                    .multicombine=T,.maxcombine=10,.packages="aspic"){
+                    .multicombine=T,.maxcombine=10,.packages=c("aspic","plyr")){
  
              if (is.null(.combine)) ..combine=list else ..combine=.combine
              res=foreach(i=names(object), .combine=..combine,
@@ -270,7 +275,7 @@ setMethod('fit',  signature(object='aspics',index="missing"),
 setMethod('boot',  signature(object='aspics'),
           function(object, dir=tempdir(), package=class(object), exeNm="aspic",boot=500,
                    .combine=NULL,
-                   .multicombine=T,.maxcombine=10,.packages="aspic"){
+                   .multicombine=T,.maxcombine=10,.packages=c("aspic","plyr")){
             
             if (is.null(.combine)) ..combine=list else ..combine=.combine
             res=foreach(i=names(object), .combine=..combine,

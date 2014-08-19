@@ -21,7 +21,7 @@ setMethod('aspic', signature(object='missing'),
           })
 
 setMethod('aspic', signature(object="data.frame"),
-    function(object,r=0.25,k=NA,msy=NA,...){
+    function(object,r=0.25,k=as.numeric(NA),msy=as.numeric(NA),...){
          
             args <- list(...)
             
@@ -47,7 +47,7 @@ setMethod('aspic', signature(object="data.frame"),
             nms=dimnames(res@params)
             nms$params=c(nms$params,paste("q",seq(length(unique(object$name))),sep=""))
             
-            res@params=FLPar(NA,dimnames=nms)
+            res@params=FLPar(as.numeric(NA),dimnames=nms)
             res@params["b0"] =1.0
             if (is.na(msy)) res@params["msy"]=mean(res@catch,na.rm=T)       else res@params["msy"]=msy
             if (is.na(k))   res@params["k"]  =mean(res@params["msy"])*4.0/r else res@params["k"]  =k

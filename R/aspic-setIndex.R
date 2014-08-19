@@ -50,23 +50,23 @@ setIndexFn=function(object,value){
   res@diags=data.frame(NULL)
 
   # params      
-  res@params =FLPar(NA,dimnames=list(params=c("b0","msy","k"),iter=1))
+  res@params =FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),iter=1))
 
   params(asp)
 
   # control 
-  res@control=FLPar(NA,c(length(c(c("b0","msy","k"),paste("q",seq(length(idxs)),sep=""))),5),
+  res@control=FLPar(as.numeric(NA),c(length(c(c("b0","msy","k"),paste("q",seq(length(idxs)),sep=""))),5),
                        dimnames=list(params=c(c("b0","msy","k"),paste("q",seq(length(idxs)),sep="")),
                                    c("fit","min","val","max","lambda"),iter=1))
 
   # vcov      
-  res@vcov=FLPar(NA,dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1))
+  res@vcov=FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1))
 
   # hessian       
-  res@hessian=FLPar(NA,dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1))
+  res@hessian=FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1))
 
   # objFn
-  res@objFn  =FLPar(array(NA,dim=c(2,1),dimnames=list("value"=c("rss","rsq"),iter=1)))
+  res@objFn  =FLPar(array(as.numeric(NA),dim=c(2,1),dimnames=list("value"=c("rss","rsq"),iter=1)))
 
   # mng 
   res@rnd=object@rnd

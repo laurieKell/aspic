@@ -338,11 +338,11 @@ aspicInp =function(x){
   
   #  [8] "7  ## Number of fisheries (data series)"                                                                                           
   n     =ctrl[[8]]  
-  params=FLPar("b0"=NA,"k"=NA,"msy"=NA)
+  params=FLPar("b0"=as.numeric(NA),"k"=as.numeric(NA),"msy"=as.numeric(NA))
   parNms=c(c("b0","msy","k"),paste("q",seq(n),sep=""))
-  res@params=FLPar(NA,parNms,iter=1)
+  res@params=FLPar(as.numeric(NA),parNms,iter=1)
   
-  res@control=FLPar(array(NA,c(length(c(c("b0","msy","k"),paste("q",seq(n),sep=""))),5,1),dimnames=list(params=parNms,c("fit","min","val","max","lambda"),iter=1)))
+  res@control=FLPar(array(as.numeric(NA),c(length(c(c("b0","msy","k"),paste("q",seq(n),sep=""))),5,1),dimnames=list(params=parNms,c("fit","min","val","max","lambda"),iter=1)))
   
   # [10] "1.00000  ## B1/K (starting guess, usually 0 to 1)"                                                                                 
   res@control["b0", "val"]=ctrl[[10]][1]

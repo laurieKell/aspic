@@ -25,7 +25,7 @@ setMethod("plot", signature(x="aspics", y="missing"),
             "Harvest"=function(x) harvest(x),
             "Yield"  =function(x) catch(x)),...)
    
-    plotComps(x,fn,probs,size,lty,facet))
+    biodyn:::plotComps(x,fn,probs,size,lty,facet))
 
 # @param  \code{fn}, a list of functions that estimate the quantities for plotting
 # @param  \code{probs}, a vector specifying the percentiles for plotting, these are c(0.95,0.50,0.05) by default.

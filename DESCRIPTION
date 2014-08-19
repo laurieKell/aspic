@@ -13,6 +13,9 @@ Depends:
     biodyn(>= 0.0.1),
     stringr(>= 0.6.2),
     reshape(>= 0.8.4),
+Imports:
+    plyr,
+    ggplot2
 Collate:
     'aspic-class.R'
     'aspics.R'
