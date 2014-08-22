@@ -164,6 +164,8 @@ checkFile=function(x){
 qqLine <- function(x,y){ 
   qtlx <- quantile(x, prob=c(0.25,0.75), na.rm=T)
   qtly <- quantile(y, prob=c(0.25,0.75), na.rm=T)
+  qtlx <- quantile(x, probs=c(0.25,0.75), na.rm=T)
+  qtly <- quantile(y, probs=c(0.25,0.75), na.rm=T)
   
   a <- (qtly[1]- qtly[2]) / (qtlx[1] - qtlx[2])
   b <- qtly[1] - qtlx[1] * a
