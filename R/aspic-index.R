@@ -39,3 +39,10 @@ setMethod('index',signature(object='aspic'),
                   }           
             
             })
+
+indexFn<-function(x){
+  u=index(x)[,c("name","year","index")]
+  names(u)[3]="data"
+  Us=FLQuants(dlply(u,.(name), function(x) as.FLQuant(x[,c("year","data")])))
+
+  return(Us)}

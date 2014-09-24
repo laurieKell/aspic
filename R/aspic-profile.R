@@ -35,7 +35,7 @@ setMethod("profile", signature(fitted="aspic"),
                    fn   =function(x) cbind(model.frame(params(x)), 
                                            model.frame(refpts(x)),
                                            model.frame(x@objFn)[,-3],
-                                           t(unlist(x@ll)[1,drop=T])),
+                                           model.frame(x@ll[,2]/(x@ll[,3]-1))),
                    run=TRUE,...){
   
         if (dims(fitted)$iter>1) stop("can only be done for a single iter")

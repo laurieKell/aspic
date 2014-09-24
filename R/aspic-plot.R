@@ -39,9 +39,9 @@ plotSP=function(object,biomass=FLQuant(seq(0,max(params(object)["k"]),length.out
   if ((dims(object)$iter>1 | dims(params(object))$iter>1) & dims(biomass)$iter==1) 
     biomass=propagate(biomass,max(dims(object)$iter,dims(params(object))$iter))
   
-  p <-  ggplot(model.frame(FLQuants(stock=biomass, yield=FLQuant(computeSP(object,biomass))))) +
+  p <-  ggplot(model.frame(FLQuants(stock=biomass, yield=FLQuant(computePrd(object,biomass))))) +
     geom_line(aes(stock, yield, group=iter, col=iter)) +
     geom_point(aes(bmsy,msy,col=iter),size=2,data=cast(as.data.frame(refpts(object)),iter~refpts,value="data")) +
     xlab("Stock") + ylab("Surplus Production")
-  print(p)
-  invisible(p)} 
+
+  p} 

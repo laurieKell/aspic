@@ -87,9 +87,9 @@ chkIters=function(object){
 jkIdx=function(x) dimnames(x)[[1]][ !is.na(x$index)]
 
 runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copyExe=FALSE){
- 
+  
   object@index=object@index[object@index$year %in% range(object)["minyear"]:range(object)["maxyear"],]
- 
+  
   if (any(is.na(object@catch))){
        tmp=ddply(object@index, .(year), with, sum(catch,na.rm=TRUE))
        object@catch=as.FLQuant(tmp[,"V1"], dimnames=list(year=tmp[,"year"]))
@@ -103,7 +103,6 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copy
   oldwd=getwd()
   setwd(dir)
   path=biodyn:::exe("aspic")
-  
   
   if (.Platform$OS.type == "windows" & copyExe) 
     file.copy(paste(paste(system.file("bin", "windows", package=package, mustWork=TRUE),exeNm, sep="/"),"exe",sep="."), dir)
@@ -121,7 +120,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copy
     us=paste("u",seq(length(dimnames(params(object))$params[grep("q",dimnames(params(object))$params)])),sep="")
     dmns=list(params=us,quantity=c("ll","ss","n"),iter=seq(1))
     object@ll=FLPar(array(NA,dim=unlist(lapply(dmns,length)),dimnames=dmns))
-
+  
     object=chkIters(object)
   
     for (i in seq(dims(object)$iter)){  
@@ -135,10 +134,10 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copy
                   
         # create exe input files
         .writeAspicInp(FLCore:::iter(object,i),what="FIT",niter=1,fl=paste(exeNm,".inp",sep=""))
-   
+        
         # run
         #system(paste("./", exeNm, paste(" ",exeNm,".inp",sep=""),sep=""))
-        print(paste("aspic", paste(" ","aspic",".inp",sep=""),sep=""))
+        #print(paste("aspic", paste(" ","aspic",".inp",sep=""),sep=""))
         system(paste("aspic", paste(" ","aspic",".inp",sep=""),sep=""))
         #system(paste(exeNm, paste(" ",exeNm,".inp",sep=""),sep=""))
         
@@ -172,7 +171,7 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copy
         object@diags=object@diags[,-10]
         object@diags=object@diags[!is.na(object@diags$name),]
         } else {
-   
+          
           rtn=try(readAspic(paste(exeNm,"prn",sep="."))) 
           if (is.data.frame(rtn)) object@diags=rtn[!is.na(rtn$residual),]
 
@@ -185,18 +184,19 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copy
           #object@diags$stock=object@diags$stock.
           object@diags=object@diags[,-10]
           try(object@objFn[1,i]<-sum(diags(object)$residual^2,na.rm=T))     
-          object@diags=object@diags[!is.na(object@diags$name),]
-          }            
+          object@diags=object@diags[!is.na(object@diags$name),]  
+        }            
        
         dgs=subset(object@diags,!is.na(object@diags$residual))
-
+#print("ll")        
         try(object@ll@.Data[,"ll",i]<-daply(dgs, .(name), with, biodyn:::calcLogLik(residual,type=3)))
+#print("ss")
         try(object@ll@.Data[,"ss",i]<-daply(dgs, .(name), with, sum(residual^2)))
+#print("n")
         try(object@ll@.Data[,"n", i]<-daply(dgs, .(name), function(x) dim(x)[1]))
-        }
+    }
   
     #if (dims(object)$iter!=1) object@diags=data.frame(NULL)
-
     setwd(oldwd)
    
     return(object)}

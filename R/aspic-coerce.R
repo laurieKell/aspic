@@ -140,11 +140,14 @@ setAs('aspic', 'biodyn',
 
         par=FLPar("r"=.6,"k"=c(params(from)["k"]),"b0"=c(params(from)["b0"]),"p"=1)
         par["r"]=c(params(from)["msy"]/(par["k"]*(1/(1+par["p"]))^(1/par["p"]+1)))
-        res=biodyn(factor("pellat"),par)
+        res=biodyn(factor("pellat"))
+        params(res)=par
 
         res@control[c("p","b0"),1,1]=-1
        
-        for (i in names(sA[(names(sA) %in% names(sB))]))
+        nms=names(sA[(names(sA) %in% names(sB))])
+        nms=nms[nms!="control"]
+        for (i in nms)
           slot(res,i)=slot(from,i)
    
         cpue=index(from,F)        
