@@ -48,7 +48,7 @@ setMethod('control<-',  signature(object='aspic',value="FLPar"),
 
 setMethod('catch<-',  signature(object='aspic',value="character"),
           function(object,value) {
-            object@index=readCpue(value,"aspic")
+            object@index=iUAspic(value) #,"aspic")
             
             dat=ddply(object@index[object@index$code %in% c("CC","CE"),],.(year), with, data.frame(data=sum(catch)))
             

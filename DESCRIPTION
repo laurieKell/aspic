@@ -12,7 +12,7 @@ Depends:
     R(>= 3.0.1),
     biodyn(>= 0.0.1),
     stringr(>= 0.6.2),
-    reshape(>= 0.8.4),
+    reshape(>= 0.8.4)
 Imports:
     plyr,
     ggplot2
@@ -33,4 +33,6 @@ Collate:
     'aspic-index.R'
     'aspic-io.R'
     'aspic-update.R'
-    'aspic-setIndex.R'
+    'aspic-setIndex.R'  
+    'aspic-kobe.R'
+    'readU-aspic.R'

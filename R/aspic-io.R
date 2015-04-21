@@ -269,7 +269,8 @@ aspicPrb =function(file,relative=TRUE){
     f.   <-sweep(f.,6,fmsy,"/")
     }
   
-  return(FLQuants(harvest=f.,stock=b.))}
+  return(FLQuants(harvest=FLQuant(f.),
+                  stock  =FLQuant(b.)))}
 
 aspicRdat=function(file){            
   res=dget(file)
@@ -391,7 +392,7 @@ aspicInp =function(x){
   #   #  [7] "0.0  ## Stat weight for B1>K as residual (usually 0 or 1)" 
   #   res@wt      =ctrl[[7]][1]
   
-  res@index=readCpue(x,"aspic")
+  res@index=iUAspic(x)#,"aspic")
   
   rng       =range(res@index$year)
   names(rng)=c("minyear","maxyear")
