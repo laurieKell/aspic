@@ -111,8 +111,8 @@ setAs('biodyn','aspic',
         sA=getSlots("aspic")
         sB=getSlots("biodyn")
         
-        sA=sA[!(names(sA) %in% c("model","params"))]
-        sB=sB[!(names(sB) %in% c("model","params"))]
+        sA=sA[!(names(sA) %in% c("model","params","hcr"))]
+        sB=sB[!(names(sB) %in% c("model","params","hcr"))]
         
         res=aspic()
         

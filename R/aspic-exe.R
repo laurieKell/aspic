@@ -188,11 +188,9 @@ runExe=function(object,package="aspic",exeNm=package,dir=tempdir(),jk=FALSE,copy
         }            
        
         dgs=subset(object@diags,!is.na(object@diags$residual))
-#print("ll")        
-        try(object@ll@.Data[,"ll",i]<-daply(dgs, .(name), with, biodyn:::calcLogLik(residual,type=3)))
-#print("ss")
+      
+        try(object@ll@.Data[,"ll",i]<-daply(dgs, .(name), with, biodyn:::calcLogLik(residual,residual/residual,type=3)))
         try(object@ll@.Data[,"ss",i]<-daply(dgs, .(name), with, sum(residual^2)))
-#print("n")
         try(object@ll@.Data[,"n", i]<-daply(dgs, .(name), function(x) dim(x)[1]))
     }
   

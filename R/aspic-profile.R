@@ -1,3 +1,4 @@
+
 #' profile
 #'
 #' @description 
@@ -64,11 +65,20 @@ setMethod("profile", signature(fitted="aspic"),
           
           if (!run) return(fitted)
           
-          fitted=fn(fit(fitted))}
+          fitted=fit(fitted)
+          fitted=fn(fitted)}
         else
           fitted@control=profileGrid(fitted@control,which,range)
           
         return(fitted)})
+
+refpts<-function(object){
+  msy=fmsy(object)*bmsy(object)
+  dimnames(msy)$params="msy"
+  rbind(msy,
+        bmsy(object),
+        fmsy(object))}
+
 
 setMethod('profile',  signature(fitted='aspics'),
           function(fitted,which,

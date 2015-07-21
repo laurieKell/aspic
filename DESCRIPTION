@@ -34,5 +34,6 @@ Collate:
     'aspic-io.R'
     'aspic-update.R'
     'aspic-setIndex.R'  
-    'aspic-kobe.R'
+    'aspic-kobe.R'  
+    'aspic-refpts.R'
     'readU-aspic.R'

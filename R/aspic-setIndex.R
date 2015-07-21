@@ -52,14 +52,13 @@ setIndexFn=function(object,value){
   # params      
   res@params =FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),iter=1))
 
-  params(asp)
-
+  
   # control 
   res@control=FLPar(as.numeric(NA),c(length(c(c("b0","msy","k"),paste("q",seq(length(idxs)),sep=""))),5),
                        dimnames=list(params=c(c("b0","msy","k"),paste("q",seq(length(idxs)),sep="")),
                                    c("fit","min","val","max","lambda"),iter=1))
 
-  # vcov      
+# vcov      
   res@vcov=FLPar(as.numeric(NA),dimnames=list(params=c("b0","msy","k"),param=c("b0","msy","k"),iter=1))
 
   # hessian       
@@ -91,7 +90,22 @@ setIndexFn=function(object,value){
   res@stock=object@stock
   
   ## add q??s
-  setParams( res)=value
+  #setParams( res)=value
+  
+  nms=c("b0","msy","k")
+ 
+  res@params=res@params[nms]
+  idx<-index(res)
+  stk<-as.data.frame(stock(res),drop=T)
+  
+  q=ddply(idx,.(name), function(idx){
+        with(merge(idx,stk),
+        mean(index/data,na.rm=T))})
+ 
+  q.=FLPar(q[,2])
+  dimnames(q.)$params=paste("q",seq(dim(q)[1]),sep="")
+  params(res)=rbind(params(res),q.)
+  
   setControl(res)=params(res)
   
   res}
@@ -99,7 +113,20 @@ setIndexFn=function(object,value){
 setGeneric("setIndex<-",    function(object,value,...)   standardGeneric('setIndex<-'))
 setMethod('setIndex<-', signature(object='aspic',value="data.frame"), function(object,value) 
   setIndexFn(object,value))
+setMethod('setIndex<-', signature(object='aspic',value="FLQuants"), 
+  function(object,value) {
+  
+    value=as.data.frame(mcf(value),drop=TRUE)
+    names(value)[c(2,3)]=c("index","name")
+    value=cbind(value,code=factor("I1",levels=c("CE","CC","B0","B1","B2","I0","I1","I2")))[,c("name","year","code","index")]
+    ctc  =as.data.frame(catch(object),drop=TRUE)
+    ctc  =cbind(ctc,name=unique(value$name)[1])
+    value=merge(value,ctc,by=c("year","name"),all=TRUE)
+    
+    value[value$name==unique(value$name)[1],"code"]="CC"
+    names(value)[5]="catch"
 
+    setIndexFn(object,value)})
 
 # 
 # object=asp
